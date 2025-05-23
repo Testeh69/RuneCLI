@@ -1,3 +1,6 @@
+![RuneCLI Logo](./assets/pictures/logo_rune_cli.png)
+
+
 # RuneCLI
 
 A simple command-line RPG game written in C++.
