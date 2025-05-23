@@ -1,5 +1,4 @@
-#include <player.cpp>;
-#include <iostream>
+#include "fight.hpp"
 
 
 

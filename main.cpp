@@ -1,6 +1,6 @@
 #include <iostream>
-#include <fight.cpp>
-#include <player.cpp>
+#include "event/fight.hpp"
+#include  "lifeform/player.hpp"
 
 
 using namespace std;
