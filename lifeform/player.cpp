@@ -3,8 +3,8 @@
 #include "player.hpp"
 
 void LifeForm::attack(LifeForm& target) {
-    std::cout<< this -> name << " attaque " << target.name << std::endl;
     int damage = this->attaque - target.defense;
+    std::cout << this->name << " deals " << damage << " damage to " << target.name << std::endl;    std::cout<<std::endl;
     if (damage < 0) damage = 0;
     target.life -= damage;
     if (target.life <= 0) {

@@ -36,6 +36,11 @@ int main() {
 
             }
         }
+        else if  (choice_player == 2)
+        {
+           break;
+        }
+        
     }
  
     return 0;
