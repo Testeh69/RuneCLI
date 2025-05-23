@@ -52,6 +52,6 @@ make clean
 
 
 
-👨‍💻 Contributing
+## 👨‍💻 Contributing
 
 This is an open learning project. PRs and issues are welcome, especially if you want to help with features, structure, or game design!
