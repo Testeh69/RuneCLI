@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <string>
 #include "player.hpp"
 
 void LifeForm::attack(LifeForm& target) {
@@ -43,4 +43,16 @@ Monster::Monster(int life, int att, int def, int vit) {
     this->defense = def;
     this->vitesse = vit;
     this->status_life = true;
+}
+
+
+
+Player createCharacter(){
+    Player player = Player(100,10,10,10);
+    std::string username;
+    std::cout<<"Enter your username"<<std::endl;
+    std::cin>>username;
+    std::cout<<std::endl;
+    player.name = username;
+    return player;
 }

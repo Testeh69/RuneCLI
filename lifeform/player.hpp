@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <vector>
+
 
 class LifeForm {
 public:
@@ -20,9 +22,20 @@ public:
 class Player : public LifeForm {
 public:
     Player(int life, int att, int def, int vit);
+
+private:
+    int money;
+
+    
 };
 
 class Monster : public LifeForm {
 public:
     Monster(int life, int att, int def, int vit);
+
+private:
+    int dropMoney;
 };
+
+
+Player createCharacter();

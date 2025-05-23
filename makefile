@@ -1,6 +1,6 @@
 TARGET = main
 
-SRC = main.cpp event/fight.cpp lifeform/player.cpp
+SRC = main.cpp  gameloop.cpp event/fight.cpp lifeform/player.cpp assets/dialog/intro.cpp
 
 ${TARGET} : ${SRC}
 	g++ ${SRC} -o ${TARGET}
