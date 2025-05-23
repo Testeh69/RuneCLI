@@ -4,6 +4,7 @@
 class LifeForm {
 public:
     int life;
+    int life_original;
     int attaque;
     int defense;
     int vitesse;
@@ -12,6 +13,8 @@ public:
     std::string name;
 
     void attack(LifeForm& target);
+
+    void display_data();
 };
 
 class Player : public LifeForm {

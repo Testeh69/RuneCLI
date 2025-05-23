@@ -3,4 +3,7 @@
 
 #pragma once
 
-int fight (Player personnage, Monster monstre);
+
+int menu_fight();
+
+int fight (Player& personnage, Monster& monstre);
