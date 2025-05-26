@@ -18,8 +18,8 @@ int fight (Player& personnage, Monster& monstre){
     std::cout<<std::endl;
     int output_fight;
     while (personnage.status_life && monstre.status_life){
-        personnage.display_data();
-        monstre.display_data(); 
+        personnage.displayData();
+        monstre.displayData(); 
         if (personnage.vitesse > monstre.vitesse){
             int player_action = menuFight();
             if (player_action == 1){
@@ -85,7 +85,14 @@ void displayFightResult(FightResult result) {
 
 
 void fightLoop(Player& player){
-    Monster monster = Monster(30, 12, 6,12);
+    Monster monster = Monster(
+        30, 
+        12,  
+        6,   
+        4,   
+        8,   
+        18   
+    );
     int result = fight(player, monster);
     FightResult fightresult = static_cast<FightResult>(result);
     displayFightResult(fightresult);

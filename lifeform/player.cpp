@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 #include "player.hpp"
+#include "job/job.hpp"
+#include "job/jobDatabase.hpp"
+
 
 void LifeForm::attack(LifeForm& target) {
     int damage = this->attaque - target.defense;
@@ -15,32 +18,53 @@ void LifeForm::attack(LifeForm& target) {
 
 
 
-void LifeForm::display_data(){
+void LifeForm::displayData(){
     std::cout<< this->name<<std::endl;
     std::cout<< this->life<<"/"<<this->life_original<< " PV"<<std::endl;
     std::cout<<std::endl;
-
 }
 
 
-Player::Player(int life, int att, int def, int vit) {
+Player::Player(int life, int att,int mag_pow, int mag_def, int def, int vit) {
     this->name = "Runah";
     this->status = "Player";
     this->life_original = life;
     this->life = life;
     this->attaque = att;
+    this->magical_power = mag_pow;
     this->defense = def;
+    this->magical_defense = mag_def;
     this->vitesse = vit;
     this->status_life = true;
 }
 
-Monster::Monster(int life, int att, int def, int vit) {
+
+void Player::setJob(std::string new_job){
+    this->job = new_job;
+    Job define_job = job_database[new_job];
+    this->life_original += define_job.life;
+    this->attaque += define_job.attaque;
+    this->magical_power += define_job.magical_power;
+    this->magical_defense += define_job.magical_defense;
+    this->defense += define_job.defense;
+    this->vitesse += define_job.vitesse;
+}
+
+
+void Player::displayJob(){
+    std::cout<<"Vous avez choisie le job suivant ->"<<this->job<<std::endl;
+}
+
+
+Monster::Monster(int life, int att,int mag_pow, int mag_def, int def, int vit){
     this->name = "Goblin";
     this->status = "Monster";
     this->life_original = life;
     this->life = life;
     this->attaque = att;
+    this->magical_power = mag_pow;
     this->defense = def;
+    this->magical_defense = mag_def;
     this->vitesse = vit;
     this->status_life = true;
 }
@@ -48,7 +72,7 @@ Monster::Monster(int life, int att, int def, int vit) {
 
 
 Player createCharacter(){
-    Player player = Player(100,10,10,10);
+    Player player = Player(100,10,10,10,10,10);
     std::string username;
     std::cout<<"Enter your username"<<std::endl;
     std::cin>>username;
