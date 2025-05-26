@@ -23,24 +23,35 @@ void LifeForm::display_data(){
 }
 
 
-Player::Player(int life, int att, int def, int vit) {
+Player::Player(int life, int att,int mag_pow, int mag_def, int def, int vit) {
     this->name = "Runah";
     this->status = "Player";
     this->life_original = life;
     this->life = life;
     this->attaque = att;
+    this->magical_power = mag_pow;
     this->defense = def;
+    this->magical_defense = mag_def;
     this->vitesse = vit;
     this->status_life = true;
 }
 
-Monster::Monster(int life, int att, int def, int vit) {
+
+void Player::setJob(std::string new_job){
+    this->job = new_job;
+}
+
+
+
+Monster::Monster(int life, int att,int mag_pow, int mag_def, int def, int vit){
     this->name = "Goblin";
     this->status = "Monster";
     this->life_original = life;
     this->life = life;
     this->attaque = att;
+    this->magical_power = mag_pow;
     this->defense = def;
+    this->magical_defense = mag_def;
     this->vitesse = vit;
     this->status_life = true;
 }
@@ -48,7 +59,7 @@ Monster::Monster(int life, int att, int def, int vit) {
 
 
 Player createCharacter(){
-    Player player = Player(100,10,10,10);
+    Player player = Player(100,10,10,10,10,10);
     std::string username;
     std::cout<<"Enter your username"<<std::endl;
     std::cin>>username;

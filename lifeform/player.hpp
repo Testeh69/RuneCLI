@@ -5,14 +5,18 @@
 
 class LifeForm {
 public:
+    std::string status;
+    std::string name;
     int life;
     int life_original;
     int attaque;
+    int magical_power;
+    int magical_defense;  
     int defense;
     int vitesse;
     bool status_life;
-    std::string status;
-    std::string name;
+    
+    
 
     void attack(LifeForm& target);
 
@@ -21,17 +25,20 @@ public:
 
 class Player : public LifeForm {
 public:
-    Player(int life, int att, int def, int vit);
+    Player(int life, int att,int mag_pow, int mag_def, int def, int vit);
+
+
+    void setJob(std::string job);
 
 private:
-    int money;
-
+    int money = 0;
+    std::string job = "Jobless";
     
 };
 
 class Monster : public LifeForm {
 public:
-    Monster(int life, int att, int def, int vit);
+    Monster(int life, int att,int mag_pow, int mag_def, int def, int vit);
 
 private:
     int dropMoney;

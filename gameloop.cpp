@@ -8,7 +8,8 @@ int menu (){
     int input_user;
     cout<< "========RuneCLI===="<<endl;  
     cout<<"1-Arena"<<endl;
-    cout<<"2-Exit" << endl;
+    cout<<"2-Shop" << endl;
+    cout<<"3-Exit" << endl;
     cout<<"Choice:";
     cin >> input_user;
     return input_user;
