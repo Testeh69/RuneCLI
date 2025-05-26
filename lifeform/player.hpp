@@ -20,7 +20,7 @@ public:
 
     void attack(LifeForm& target);
 
-    void display_data();
+    void displayData();
 };
 
 class Player : public LifeForm {
@@ -29,6 +29,8 @@ public:
 
 
     void setJob(std::string job);
+
+    void displayJob();
 
 private:
     int money = 0;

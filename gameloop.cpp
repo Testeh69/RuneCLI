@@ -1,18 +1,26 @@
 #include "gameloop.hpp"
-#include "unordered_map"
 
 
-using namespace std;
 
 int menu (){
     int input_user;
-    cout<< "========RuneCLI===="<<endl;  
-    cout<<"1-Arena"<<endl;
-    cout<<"2-Shop" << endl;
-    cout<<"3-Exit" << endl;
-    cout<<"Choice:";
-    cin >> input_user;
+    std::cout<< "========RuneCLI===="<<std::endl;  
+    std::cout<<"1-Arena"<<std::endl;
+    std::cout<<"2-Shop" <<std::endl;
+    std::cout<<"3-Exit" <<std::endl;
+    std::cout<<"Choice:";
+    std::cin >> input_user;
     return input_user;
+}
+
+
+
+void chooseJob(Player& character,std::unordered_map<std::string,Job>& job_list){
+    std::unordered_map<int,std::string> link_job_choice = displayJob(job_list);
+    int choice_job;
+    std::cin>>choice_job;
+    std::string job_character = link_job_choice[choice_job];
+    character.setJob(job_character);
 }
 
 
@@ -20,8 +28,8 @@ void gameLoop(){
 
     displayIntro();
     Player player = createCharacter();
-    std::unordered_map<int,string> link_job_choice = displayJob(job_database);
-
+    chooseJob(player, job_database);
+    player.displayJob();
     while(player.life > 0){
         int choice_player = menu();
         if (choice_player == 1){

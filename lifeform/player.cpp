@@ -18,7 +18,7 @@ void LifeForm::attack(LifeForm& target) {
 
 
 
-void LifeForm::display_data(){
+void LifeForm::displayData(){
     std::cout<< this->name<<std::endl;
     std::cout<< this->life<<"/"<<this->life_original<< " PV"<<std::endl;
     std::cout<<std::endl;
@@ -50,6 +50,10 @@ void Player::setJob(std::string new_job){
     this->vitesse += define_job.vitesse;
 }
 
+
+void Player::displayJob(){
+    std::cout<<"Vous avez choisie le job suivant ->"<<this->job<<std::endl;
+}
 
 
 Monster::Monster(int life, int att,int mag_pow, int mag_def, int def, int vit){

@@ -26,6 +26,9 @@ std::unordered_map<int, std::string> displayJob(std::unordered_map<std::string,J
         link_job_choice.insert({index,paire.first});
         index++;
     }
+    std::cout<<std::endl;
+    std::cout<<"Veuillez entre le job que vous voulez ?"<<std::endl;
+
     return link_job_choice;
 }
 

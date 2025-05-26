@@ -18,8 +18,8 @@ int fight (Player& personnage, Monster& monstre){
     std::cout<<std::endl;
     int output_fight;
     while (personnage.status_life && monstre.status_life){
-        personnage.display_data();
-        monstre.display_data(); 
+        personnage.displayData();
+        monstre.displayData(); 
         if (personnage.vitesse > monstre.vitesse){
             int player_action = menuFight();
             if (player_action == 1){
