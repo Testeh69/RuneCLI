@@ -1,6 +1,13 @@
 TARGET = main
 
-SRC = main.cpp  gameloop.cpp event/fight.cpp lifeform/player.cpp assets/dialog/intro.cpp
+SRC = main.cpp\
+	  gameloop.cpp\
+	  event/fight.cpp\
+	  lifeform/player.cpp\
+	  lifeform/job/job.cpp\
+	  lifeform/job/jobDatabase\
+	  assets/dialog/intro.cpp\
+
 
 ${TARGET} : ${SRC}
 	g++ ${SRC} -o ${TARGET}
@@ -15,4 +22,4 @@ clean:
 
 #make pour compiler le projet
 #make go pour lancer le projet compiler
-#make clean pour supprimer le projet
+#make clean pour supprimer le projet 

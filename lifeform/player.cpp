@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 #include "player.hpp"
+#include "job.hpp";
+#include "jobDatabase.hpp"
+
 
 void LifeForm::attack(LifeForm& target) {
     int damage = this->attaque - target.defense;
@@ -19,7 +22,6 @@ void LifeForm::display_data(){
     std::cout<< this->name<<std::endl;
     std::cout<< this->life<<"/"<<this->life_original<< " PV"<<std::endl;
     std::cout<<std::endl;
-
 }
 
 
@@ -39,6 +41,13 @@ Player::Player(int life, int att,int mag_pow, int mag_def, int def, int vit) {
 
 void Player::setJob(std::string new_job){
     this->job = new_job;
+    Job define_job = job_database[new_job];
+    this->life_original += define_job.life;
+    this->attaque += define_job.attaque;
+    this->magical_power += define_job.magical_power;
+    this->magical_defense += define_job.magical_defense;
+    this->defense += define_job.defense;
+    this->vitesse += define_job.vitesse;
 }
 
 

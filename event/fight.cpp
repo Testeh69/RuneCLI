@@ -85,7 +85,14 @@ void displayFightResult(FightResult result) {
 
 
 void fightLoop(Player& player){
-    Monster monster = Monster(30, 12, 6,12);
+    Monster monster = Monster(
+        30, 
+        12,  
+        6,   
+        4,   
+        8,   
+        18   
+    );
     int result = fight(player, monster);
     FightResult fightresult = static_cast<FightResult>(result);
     displayFightResult(fightresult);

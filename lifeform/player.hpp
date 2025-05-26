@@ -41,7 +41,7 @@ public:
     Monster(int life, int att,int mag_pow, int mag_def, int def, int vit);
 
 private:
-    int dropMoney;
+    int drop_money;
 };
 
 

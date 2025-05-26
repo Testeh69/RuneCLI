@@ -1,6 +1,9 @@
 #include <string>
 
 
+
+
+
 struct Job {
     std::string job_name;
     int life;
@@ -10,7 +13,4 @@ struct Job {
     int defense;
     int vitesse;
 };
-
-
-
 
