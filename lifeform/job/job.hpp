@@ -1,5 +1,5 @@
 #include <string>
-
+#include <unordered_map>
 
 #pragma once
 
@@ -12,3 +12,8 @@ struct Job {
     int defense;
     int vitesse;
 };
+
+
+
+
+std::unordered_map<int, std::string> displayJob(std::unordered_map<std::string,Job>& job_list);

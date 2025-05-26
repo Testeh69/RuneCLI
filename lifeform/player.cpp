@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include "player.hpp"
-#include "job.hpp";
-#include "jobDatabase.hpp"
+#include "job/job.hpp"
+#include "job/jobDatabase.hpp"
 
 
 void LifeForm::attack(LifeForm& target) {

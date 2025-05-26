@@ -1,5 +1,5 @@
 #include "gameloop.hpp"
-
+#include "unordered_map"
 
 
 using namespace std;
@@ -20,6 +20,8 @@ void gameLoop(){
 
     displayIntro();
     Player player = createCharacter();
+    std::unordered_map<int,string> link_job_choice = displayJob(job_database);
+
     while(player.life > 0){
         int choice_player = menu();
         if (choice_player == 1){

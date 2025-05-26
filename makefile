@@ -5,7 +5,7 @@ SRC = main.cpp\
 	  event/fight.cpp\
 	  lifeform/player.cpp\
 	  lifeform/job/job.cpp\
-	  lifeform/job/jobDatabase\
+	  lifeform/job/jobDatabase.cpp\
 	  assets/dialog/intro.cpp\
 
 
