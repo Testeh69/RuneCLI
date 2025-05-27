@@ -8,12 +8,13 @@ You play as a lone warrior fighting monsters in turn-based combat.
 ## 🛡️ Features
 
 - Basic combat system (action choice, turn-by-turn display, victory condition)
+- Character classes that affect stats (e.g., Warrior, Mage)
+
 
 
 
 ## 🧱 Planned Features
 
-- Character classes that affect stats (e.g., Warrior, Mage)
 - Save/load system
 - Multiple dungeons
 - Multiple attacks per character

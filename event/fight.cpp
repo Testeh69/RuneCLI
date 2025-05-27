@@ -62,7 +62,7 @@ int fight (Player& personnage, Monster& monstre){
                     break;
                 
                 case 2:
-                    output_fight = 2;
+                     return 2;
                     break;
                 default:
                     break;
@@ -75,20 +75,15 @@ int fight (Player& personnage, Monster& monstre){
                 break;
             }
             if (personnage.life <= 0) {
-                output_fight = 0;
+                return 0;
             }
             else if (monstre.life <= 0){
-                output_fight = 1;
+                return 1;
             }
-            else if (output_fight == 2){
-                break;
-            }
-
+        
         }
     }
-    return output_fight;
     
-
 } 
 
 

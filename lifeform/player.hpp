@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-
+#include <unordered_map>
 
 class LifeForm {
 public:
@@ -15,7 +15,27 @@ public:
     int defense;
     int vitesse;
     bool status_life;
-    
+    std::unordered_map<std::string, int> elemental_resistance = {
+    {"fire", 0},
+    {"ice", 0},
+    {"water", 0},
+    {"earth", 0},
+    {"wind", 0},
+    {"lightning", 0},
+    {"light", 0},
+    {"dark", 0},
+    {"void", 0},
+    {"time", 0},
+    {"sound", 0},
+    {"gravity", 0},
+    {"ether", 0},
+    {"dream", 0},
+    {"chaos", 0},
+    {"plasma", 0},
+    {"toxic", 0},
+    {"crystal", 0},
+    {"spirit", 0}
+    };
     
 
     void attack(LifeForm& target);
@@ -35,6 +55,13 @@ public:
 private:
     int money = 0;
     std::string job = "Jobless";
+    int lv = 1;
+    int exp_gauge = 100;
+    int exp_init = 0;
+    //slot_attack -> Hasmap<Attack>
+    //backpack -> Hashmap<Object>
+    //equipement -> Hashmap<Equipement>
+    
     
 };
 
@@ -44,6 +71,10 @@ public:
 
 private:
     int drop_money;
+    int exp_drop;
+    int lv;
+    //maeterials_drop -> Hasmap<Object>
+    //slot_attack -> Hashmap<Attack>
 };
 
 

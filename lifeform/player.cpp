@@ -43,6 +43,7 @@ void Player::setJob(std::string new_job){
     this->job = new_job;
     Job define_job = job_database[new_job];
     this->life_original += define_job.life;
+    this->life  += define_job.life;
     this->attaque += define_job.attaque;
     this->magical_power += define_job.magical_power;
     this->magical_defense += define_job.magical_defense;
