@@ -44,6 +44,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "hash_map": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "queue": "cpp"
     }
 }
