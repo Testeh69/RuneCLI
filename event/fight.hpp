@@ -13,6 +13,11 @@ enum class FightResult{
 };
 
 
+enum class IdFight{
+    Player = 0,
+    Monster = 1,
+};
+
 int menuFight();
 
 int fight (Player& personnage, Monster& monstre);
