@@ -59,6 +59,7 @@ int fight (Player& personnage, Monster& monstre){
                 {
                 case 1:
                     personnage.attack(monstre);
+                    break;
                 
                 case 2:
                     output_fight = 2;
@@ -66,6 +67,7 @@ int fight (Player& personnage, Monster& monstre){
                 default:
                     break;
                 }
+                break;
             
             case IdFight::Monster:
                 monstre.attack(personnage);
@@ -77,6 +79,9 @@ int fight (Player& personnage, Monster& monstre){
             }
             else if (monstre.life <= 0){
                 output_fight = 1;
+            }
+            else if (output_fight == 2){
+                break;
             }
 
         }
