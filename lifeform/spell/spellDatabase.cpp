@@ -3,43 +3,10 @@
 //Databse spell
 
 
+
+
 std::unordered_map<std::string, std::array<std::shared_ptr<Spell>, 4>> dataBaseSpell;
 
-
-dataBaseSpell["Soulweaver"] = {
-    std::make_shared<Attack>(mind_spike),
-    std::make_shared<Support>(soul_bond),
-    nullptr,
-    nullptr
-};
-
-dataBaseSpell["Chronoblade"] = {
-    std::make_shared<Attack>(chrono_slash),
-    std::make_shared<Support>(time_surge),
-    nullptr,
-    nullptr
-};
-
-dataBaseSpell["Gravemind"] = {
-    std::make_shared<Attack>(soul_rend),
-    std::make_shared<Support>(veil_of_oblivion),
-    nullptr,
-    nullptr
-};
-
-dataBaseSpell["Luminary"] = {
-    std::make_shared<Attack>(radiant_flare),
-    std::make_shared<Support>(blessing_of_dawn),
-    nullptr,
-    nullptr
-};
-
-dataBaseSpell["Goblin"] = {
-    std::make_shared<Attack>(sneaky_stab),
-    std::make_shared<Support>(tricksters_guile),
-    nullptr,
-    nullptr
-};
 
 
 
@@ -191,3 +158,49 @@ Support tricksters_guile(
     1.4f,  // 40% boost agilité/chance
     2
 );
+
+
+
+//
+
+
+void loadDataSpell(){
+    dataBaseSpell["Soulweaver"] = {
+    std::make_shared<Attack>(mind_spike),
+    std::make_shared<Support>(soul_bond),
+    nullptr,
+    nullptr
+};
+
+dataBaseSpell["Chronoblade"] = {
+    std::make_shared<Attack>(chrono_slash),
+    std::make_shared<Support>(time_surge),
+    nullptr,
+    nullptr
+};
+
+dataBaseSpell["Gravemind"] = {
+    std::make_shared<Attack>(soul_rend),
+    std::make_shared<Support>(veil_of_oblivion),
+    nullptr,
+    nullptr
+};
+
+dataBaseSpell["Luminary"] = {
+    std::make_shared<Attack>(radiant_flare),
+    std::make_shared<Support>(blessing_of_dawn),
+    nullptr,
+    nullptr
+};
+
+dataBaseSpell["Goblin"] = {
+    std::make_shared<Attack>(sneaky_stab),
+    std::make_shared<Support>(tricksters_guile),
+    nullptr,
+    nullptr
+};
+
+
+}
+
+

@@ -10,6 +10,11 @@
 
 extern std::unordered_map<std::string, std::array<std::shared_ptr<Spell>, 4>> dataBaseSpell;
 
+
+void loadDataSpell();
+
+
+
 extern Attack mind_spike;
 
 extern Support soul_bond;
