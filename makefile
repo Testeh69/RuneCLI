@@ -7,6 +7,7 @@ SRC = main.cpp\
 	  lifeform/job/job.cpp\
 	  lifeform/job/jobDatabase.cpp\
 	  lifeform/spell/spell.cpp\
+	  lifeform/spell/spellDatabase.cpp\
 	  assets/dialog/intro.cpp\
 
 
