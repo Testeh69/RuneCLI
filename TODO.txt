@@ -1,0 +1,14 @@
+
+->Attack
+
+- Add constructor from attack and spell
+- built 4 differents moves for each classes
+- modify the fight menu 
+- modify the attack classe
+
+
+
+
+->Object
+
+->Lv

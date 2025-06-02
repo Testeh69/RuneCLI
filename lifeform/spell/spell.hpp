@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-
+#include <variant>
 
 
 // Je pense qu'il faut la diviser en une classe parente spell
@@ -12,14 +12,26 @@
 class Spell {
 
     public:
-    const std::string name;
-    const int lv_requirement;
-    const std::vector<std::string> class_requirement;
-    const std::string grade;
-    const std::string description;
-    const std::string target_spell_zone;
-    const std::string attribute;
-    const std::string type;
+
+    Spell(
+    const std::string name,
+    const int lv_requirement,
+    const std::vector<std::string> class_requirement,
+    const std::string grade,
+    const std::string description,
+    const std::string target_spell_zone,
+    const std::string attribute,
+    const std::string type
+    );
+
+    const std::string name; // nom du sort
+    const int lv_requirement; // lv requirement for the attack
+    const std::vector<std::string> class_requirement; // class requirement for the attack
+    const std::string grade; // grade of the attack
+    const std::string description; // description of the effect of the attack
+    const std::string target_spell_zone; // Area target of the attack
+    const std::string attribute; // Physique or magical
+    const std::string type; // fire, water, none, etc ...
 
 
 };
@@ -39,14 +51,14 @@ class Attack: public Spell {
             const std::string& target_spell_zone,
             const std::string& attribute,
             const std::string& type,
-            const int effect,
+            const std::variant<int,float> effect,
             const int turn
         );
     
 
 
 
-    const int effect;
+    const std::variant<int,float> effect;
     const int turn;
 
 
@@ -64,14 +76,14 @@ class Support: public Spell{
             const std::string& target_spell_zone,
             const std::string& attribute,
             const std::string& type,
-            const int boost,
+            const std::variant<int,float> boost,
             const int turn
         );
     
 
 
 
-    const int boost;
+    const std::variant<int,float> boost;
     const int turn;
 
 

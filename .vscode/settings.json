@@ -45,6 +45,7 @@
         "typeinfo": "cpp",
         "hash_map": "cpp",
         "map": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "variant": "cpp"
     }
 }
