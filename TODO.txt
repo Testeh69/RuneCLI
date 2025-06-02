@@ -1,8 +1,8 @@
 
 ->Attack
 
-- Add constructor from attack and spell
-- built 4 differents moves for each classes
+- Add constructor from attack and spell -> check
+- built 4 differents moves for each classes -> check
 - modify the fight menu 
 - modify the attack classe
 

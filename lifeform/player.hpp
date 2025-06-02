@@ -13,6 +13,7 @@ public:
     int magical_power;
     int magical_defense;  
     int defense;
+    int agility;
     int vitesse;
     bool status_life;
     std::unordered_map<std::string, int> elemental_resistance = {
@@ -45,7 +46,7 @@ public:
 
 class Player : public LifeForm {
 public:
-    Player(int life, int att,int mag_pow, int mag_def, int def, int vit);
+    Player(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit);
 
 
     void setJob(std::string job);
@@ -67,7 +68,7 @@ private:
 
 class Monster : public LifeForm {
 public:
-    Monster(int life, int att,int mag_pow, int mag_def, int def, int vit);
+    Monster(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit);
 
 private:
     int drop_money;

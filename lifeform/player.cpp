@@ -25,7 +25,7 @@ void LifeForm::displayData(){
 }
 
 
-Player::Player(int life, int att,int mag_pow, int mag_def, int def, int vit) {
+Player::Player(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit) {
     this->name = "Runah";
     this->status = "Player";
     this->life_original = life;
@@ -36,6 +36,7 @@ Player::Player(int life, int att,int mag_pow, int mag_def, int def, int vit) {
     this->magical_defense = mag_def;
     this->vitesse = vit;
     this->status_life = true;
+    this->agility = agility;
 }
 
 
@@ -57,7 +58,7 @@ void Player::displayJob(){
 }
 
 
-Monster::Monster(int life, int att,int mag_pow, int mag_def, int def, int vit){
+Monster::Monster(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit){
     this->name = "Goblin";
     this->status = "Monster";
     this->life_original = life;
@@ -68,12 +69,13 @@ Monster::Monster(int life, int att,int mag_pow, int mag_def, int def, int vit){
     this->magical_defense = mag_def;
     this->vitesse = vit;
     this->status_life = true;
+    this->agility = agility;
 }
 
 
 
 Player createCharacter(){
-    Player player = Player(100,10,10,10,10,10);
+    Player player = Player(100,10,10,10,10,10,10);
     std::string username;
     std::cout<<"Enter your username"<<std::endl;
     std::cin>>username;
