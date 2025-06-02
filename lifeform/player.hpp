@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <array>
+#include "spell/spellDatabase.hpp"
 
 class LifeForm {
 public:
@@ -37,6 +39,8 @@ public:
     {"crystal", 0},
     {"spirit", 0}
     };
+
+    std::array<std::string,4> slot_attack;
     
 
     void attack(LifeForm& target);

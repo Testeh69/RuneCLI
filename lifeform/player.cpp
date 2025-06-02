@@ -70,6 +70,8 @@ Monster::Monster(int life, int att,int mag_pow, int mag_def, int def,int agility
     this->vitesse = vit;
     this->status_life = true;
     this->agility = agility;
+    this->slot_attack[0] = sneaky_stab.name;
+    this-> slot_attack[1] = tricksters_guile.name;
 }
 
 

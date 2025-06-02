@@ -1,10 +1,13 @@
 
+-> Built a constructor of object from a json file
+
 ->Attack
 
 - Add constructor from attack and spell -> check
 - built 4 differents moves for each classes -> check
 - modify the fight menu 
 - modify the attack classe
+
 
 
 

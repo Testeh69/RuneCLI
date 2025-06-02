@@ -4,7 +4,6 @@
 
 
 
-
 std::queue<IdFight> makeTurnFightQueue (Player& character, Monster& monster){
     int vitesse_character = character.vitesse;
     int vitesse_monster = monster.vitesse;
@@ -32,7 +31,7 @@ std::queue<IdFight> makeTurnFightQueue (Player& character, Monster& monster){
 
 int menuFight(){
     int choice_action;
-    std::cout<< "Your action : 1- Attaque 2- Fuir"<<std::endl;
+    std::cout<< "Your action : 1- Attaque  2- Bag 3- Fuir"<<std::endl;
     std::cin>> choice_action;
     return choice_action;
 }
@@ -43,6 +42,8 @@ int fight (Player& personnage, Monster& monstre){
     std::cout<<std::endl;
     int output_fight;
     int choice_player;
+    int turn = 1;
+
     while (personnage.status_life && monstre.status_life){
         personnage.displayData();
         monstre.displayData(); 
@@ -60,8 +61,9 @@ int fight (Player& personnage, Monster& monstre){
                 case 1:
                     personnage.attack(monstre);
                     break;
+                    
                 
-                case 2:
+                case 3:
                      return 2;
                     break;
                 default:
@@ -114,7 +116,8 @@ void fightLoop(Player& player){
         12,  
         6,   
         4,   
-        8,   
+        8,
+        10,   
         4   
     );
     int result = fight(player, monster);
