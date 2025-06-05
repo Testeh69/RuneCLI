@@ -16,6 +16,22 @@ void LifeForm::attack(LifeForm& target) {
 
 
 
+void LifeForm::getAttackInSlot(std::string new_job){
+    std::array<std::shared_ptr<Spell>,4> array_slot = dataBaseSpell[new_job];
+    int index = 1;
+    for (const auto& spell_ptr:array_slot){
+        if (spell_ptr != nullptr){
+            std::cout<<spell_ptr->name<<std::endl;
+            std::cout<<spell_ptr->description<<std::endl;
+            std::cout<<std::endl;
+            std::cout<<std::endl;
+            this-> slot_attack[index] =  spell_ptr;
+            index++;
+        }
+    }
+}
+
+
 void LifeForm::displayData(){
     std::cout<< this->name<<std::endl;
     std::cout<< this->life<<"/"<<this->life_original<< " PV"<<std::endl;

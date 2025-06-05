@@ -54,7 +54,13 @@ void FightOneVsOne::displayInitDataFight(){
 };
 
 
-
+int FightOneVsOne::fightLoop(){
+    this->displayInitDataFight();
+    while (this->personnage.life>0 || this->monstre.life> 0){
+        makeTurnFightQueue();
+        
+    }
+};
 
 
 
@@ -77,17 +83,10 @@ void FightOneVsOne::displayFightResult(FightResult result) {
 
 
 
-void fightLoop(Player& player){
-    Monster monster = Monster(
-        30, 
-        12,  
-        6,   
-        4,   
-        8,
-        10,   
-        4   
-    );
-    int result = fight(player, monster);
-    FightResult fightresult = static_cast<FightResult>(result);
-    displayFightResult(fightresult);
+void Arena(Player& player){
+        Monster goblin("Goblin", 30, 15, 2, 3, 8, 12, 10);
+        FightOneVsOne fightArena(player, goblin);
+        int result = fightArena.fightLoop();
+        
+
 }

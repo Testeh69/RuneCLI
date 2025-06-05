@@ -1,8 +1,5 @@
-#include <iostream>
-#include <string>
 #include "entities.hpp"
-#include "job/job.hpp"
-#include "job/jobDatabase.hpp"
+
 
 
 
@@ -42,20 +39,7 @@ void Player::setJob(std::string new_job){
 }
 
 
-void Player::getAttackInSlot(std::string new_job){
-    std::array<std::shared_ptr<Spell>,4> array_slot = dataBaseSpell[new_job];
-    int index = 1;
-    for (const auto& spell_ptr:array_slot){
-        if (spell_ptr != nullptr){
-            std::cout<<spell_ptr->name<<std::endl;
-            std::cout<<spell_ptr->description<<std::endl;
-            std::cout<<std::endl;
-            std::cout<<std::endl;
-            this-> slot_attack[index] =  spell_ptr;
-            index++;
-        }
-    }
-}
+
 
 
 void Player::displayJob(){
@@ -104,8 +88,9 @@ int Player::attack(LifeForm& monstre, std::shared_ptr<Spell> spell_ptr){
 
 
 
-Monster::Monster(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit){
-    this->name = "Goblin";
+Monster::Monster(std::string& name ,int life, int att,int mag_pow, int mag_def, int def,int agility, int vit){
+    this->name = name;
+    this->job = name;
     this->status = "Monster";
     this->life_original = life;
     this->life = life;
@@ -116,6 +101,8 @@ Monster::Monster(int life, int att,int mag_pow, int mag_def, int def,int agility
     this->vitesse = vit;
     this->status_life = true;
     this->agility = agility;
+    loadDataSpell(this->job);
+    getAttackInSlot(this->job);
   
 }
 

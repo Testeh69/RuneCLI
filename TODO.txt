@@ -1,22 +1,27 @@
 
 
-->Attack
+Finis:
 
 - Add constructor from attack and spell -> check
 - built 4 differents moves for each classes -> check
-- modify the fight menu 
-- modify thje setJob method to take the dataBaseSpell with the slot_attack
-- add 1 depth for the menu for choosing the attack 
+- modify thje setJob method to take the dataBaseSpell with the slot_attack -> check
+
+
+En cours:
+- add 1 depth for the menu for choosing the attack -> En cours
+- modify the fight menu -> En cours
+
+
+
+
+
+
+FIle d'attente::
+
+
 - add a chooseSpell method for the liform class
 - modify the attack method of the lifeform classe
-
-
-
 -> Built a constructor of object from a json file
-
-
 -> IA enemy : Arena
-
 ->Object
-
 ->Lv

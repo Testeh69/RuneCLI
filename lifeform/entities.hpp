@@ -1,4 +1,9 @@
+
 #pragma once
+
+
+
+
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -6,11 +11,10 @@
 #include <algorithm>
 #include "spell/spellDatabase.hpp"
 #include "lifeform.hpp"
+#include "job/jobDatabase.hpp"
 
 
 
-
-#pragma once
 
 
 class Player : public LifeForm {
@@ -35,13 +39,11 @@ private:
     int lv = 1;
     int exp_gauge = 100;
     int exp_init = 0;
-    std::unordered_map<int,std::shared_ptr<Spell>> slot_attack;
 
     //backpack -> Hashmap<Object>
     //equipement -> Hashmap<Equipement>
     
     
-    void getAttackInSlot (std::string job);
 
     void displayAttack ();
 
@@ -56,9 +58,10 @@ private:
 
 class Monster : public LifeForm {
 public:
-    Monster(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit);
+    Monster(const std::string& name, int life, int att,int mag_pow, int mag_def, int def,int agility, int vit);
 
 private:
+    std::string job;
     int drop_money;
     int exp_drop;
     int lv;

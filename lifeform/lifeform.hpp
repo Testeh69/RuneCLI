@@ -1,7 +1,13 @@
+#pragma once
+
+
 #include <unordered_map>
 #include <string>
 #include <array>
 #include <iostream>
+#include <memory>
+#include "spell/spell.hpp"
+#include "spell/spellDatabase.hpp"
 
 
 class LifeForm {
@@ -39,10 +45,13 @@ public:
     {"spirit", 0}
     };
 
-    std::array<std::string,4> slot_attack;
+    std::unordered_map<int,std::shared_ptr<Spell>> slot_attack;
     
 
     void attack(LifeForm& target);
+
+    void getAttackInSlot (std::string job);
+
 
     void displayData();
 };

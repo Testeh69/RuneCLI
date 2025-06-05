@@ -31,8 +31,7 @@ class FightOneVsOne{
     public:
     FightOneVsOne(Player& personnage , Monster& Monstre);
 
-    void loopFight();
-
+    int fightLoop();
 
 
 
@@ -53,10 +52,8 @@ class FightOneVsOne{
 };
 
 
-int fight (Player& personnage, Monster& monstre);
 
 
-void displayFightResult(FightResult result);
 
 
 void fightLoop(Player& player);
