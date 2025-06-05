@@ -1,34 +1,10 @@
 #include <iostream>
 #include <string>
-#include "player.hpp"
+#include "entities.hpp"
 #include "job/job.hpp"
 #include "job/jobDatabase.hpp"
 
 
-
-// LIFEFORM method
-
-void LifeForm::attack(LifeForm& target) {
-    int damage = this->attaque - target.defense;
-    std::cout << this->name << " deals " << damage << " damage to " << target.name << std::endl;    std::cout<<std::endl;
-    if (damage < 0) damage = 0;
-    target.life -= damage;
-    if (target.life <= 0) {
-        target.status_life = false;
-        std::cout << this -> name << " killed " << target.name<<std::endl;
-    }
-}
-
-
-
-void LifeForm::displayData(){
-    std::cout<< this->name<<std::endl;
-    std::cout<< this->life<<"/"<<this->life_original<< " PV"<<std::endl;
-    std::cout<<std::endl;
-}
-
-
-// PLayer method
 
 
 Player::Player(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit) {
@@ -43,7 +19,11 @@ Player::Player(int life, int att,int mag_pow, int mag_def, int def,int agility, 
     this->vitesse = vit;
     this->status_life = true;
     this->agility = agility;
+
 }
+
+
+
 
 
 void Player::setJob(std::string new_job){
@@ -56,20 +36,23 @@ void Player::setJob(std::string new_job){
     this->magical_defense += define_job.magical_defense;
     this->defense += define_job.defense;
     this->vitesse += define_job.vitesse;
+    loadDataSpell(new_job);
+
     getAttackInSlot(new_job);
 }
 
 
 void Player::getAttackInSlot(std::string new_job){
     std::array<std::shared_ptr<Spell>,4> array_slot = dataBaseSpell[new_job];
-
+    int index = 1;
     for (const auto& spell_ptr:array_slot){
         if (spell_ptr != nullptr){
             std::cout<<spell_ptr->name<<std::endl;
             std::cout<<spell_ptr->description<<std::endl;
             std::cout<<std::endl;
             std::cout<<std::endl;
-            this-> slot_attack[spell_ptr -> name] =  spell_ptr;
+            this-> slot_attack[index] =  spell_ptr;
+            index++;
         }
     }
 }
@@ -77,17 +60,48 @@ void Player::getAttackInSlot(std::string new_job){
 
 void Player::displayJob(){
     std::cout<<"Vous avez choisie le job suivant ->"<<this->job<<std::endl;
+    std::cout<<std::endl;
 }
 
 
-void Player::menuAttack(){
+void Player::displayAttack(){
+    int index_action = 1;
+    for (const auto& attack_name : this->slot_attack){
+        std::cout<<index_action<<" - ";
+        std::cout<<slot_attack[attack_name.first]->name<<std::endl;
+        std::cout<<slot_attack[attack_name.first]->description<<std::endl;
+        index_action++;
+    }
+}
 
-    std::cout<<"Choissisez l'action à entreprendre...";
+void Player::displayMenu(){
+    displayAttack();
+    std::cout<<"5 - Retour"<<std::endl;
+}
+
+int Player::menuAttack(){
+    displayMenu();
+    std::cout<<"Choissisez l'action à entreprendre -> ";
+    int input_player;
+    std::cin>>input_player;
+    return input_player;
+}
+
+
+std::shared_ptr<Spell> Player::getAttack(int index_attack){
+    std::shared_ptr<Spell> spell_ptr_selected = this->slot_attack[index_attack];
+    return spell_ptr_selected;
+}
+
+int Player::attack(LifeForm& monstre, std::shared_ptr<Spell> spell_ptr){
+    std::string spell_name = spell_ptr->name;
+    return 1;
+    
 }
 
 
 
-// MOnster method
+
 
 
 Monster::Monster(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit){
@@ -102,10 +116,8 @@ Monster::Monster(int life, int att,int mag_pow, int mag_def, int def,int agility
     this->vitesse = vit;
     this->status_life = true;
     this->agility = agility;
-    this->slot_attack[0] = sneaky_stab.name;
-    this-> slot_attack[1] = tricksters_guile.name;
+  
 }
-
 
 
 

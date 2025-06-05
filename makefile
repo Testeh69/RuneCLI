@@ -3,12 +3,14 @@ TARGET = main
 SRC = main.cpp\
 	  gameloop.cpp\
 	  event/fight.cpp\
-	  lifeform/player.cpp\
+	  lifeform/lifeform.cpp\
+	  lifeform/entities.cpp\
 	  lifeform/job/job.cpp\
 	  lifeform/job/jobDatabase.cpp\
 	  lifeform/spell/spell.cpp\
 	  lifeform/spell/spellDatabase.cpp\
 	  assets/dialog/intro.cpp\
+	  data/utilsJson.cpp\
 
 
 ${TARGET} : ${SRC}

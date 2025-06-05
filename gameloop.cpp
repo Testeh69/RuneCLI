@@ -27,7 +27,6 @@ void chooseJob(Player& character,std::unordered_map<std::string,Job>& job_list){
 void gameLoop(){
 
     displayIntro();
-    loadDataSpell();
     Player player = createCharacter();
     chooseJob(player, job_database);
     player.displayJob();

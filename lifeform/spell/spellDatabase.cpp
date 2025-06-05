@@ -163,44 +163,41 @@ Support tricksters_guile(
 
 //
 
-
-void loadDataSpell(){
-    dataBaseSpell["Soulweaver"] = {
-    std::make_shared<Attack>(mind_spike),
-    std::make_shared<Support>(soul_bond),
-    nullptr,
-    nullptr
-};
-
-dataBaseSpell["Chronoblade"] = {
-    std::make_shared<Attack>(chrono_slash),
-    std::make_shared<Support>(time_surge),
-    nullptr,
-    nullptr
-};
-
-dataBaseSpell["Gravemind"] = {
-    std::make_shared<Attack>(soul_rend),
-    std::make_shared<Support>(veil_of_oblivion),
-    nullptr,
-    nullptr
-};
-
-dataBaseSpell["Luminary"] = {
-    std::make_shared<Attack>(radiant_flare),
-    std::make_shared<Support>(blessing_of_dawn),
-    nullptr,
-    nullptr
-};
-
-dataBaseSpell["Goblin"] = {
-    std::make_shared<Attack>(sneaky_stab),
-    std::make_shared<Support>(tricksters_guile),
-    nullptr,
-    nullptr
-};
-
-
+void loadDataSpell(const std::string& job) {
+    if (job == "Soulweaver") {
+        dataBaseSpell["Soulweaver"] = {
+            std::make_shared<Attack>(mind_spike),
+            std::make_shared<Support>(soul_bond),
+            nullptr,
+            nullptr
+        };
+    } else if (job == "Chronoblade") {
+        dataBaseSpell["Chronoblade"] = {
+            std::make_shared<Attack>(chrono_slash),
+            std::make_shared<Support>(time_surge),
+            nullptr,
+            nullptr
+        };
+    } else if (job == "Gravemind") {
+        dataBaseSpell["Gravemind"] = {
+            std::make_shared<Attack>(soul_rend),
+            std::make_shared<Support>(veil_of_oblivion),
+            nullptr,
+            nullptr
+        };
+    } else if (job == "Luminary") {
+        dataBaseSpell["Luminary"] = {
+            std::make_shared<Attack>(radiant_flare),
+            std::make_shared<Support>(blessing_of_dawn),
+            nullptr,
+            nullptr
+        };
+    } else if (job == "Goblin") {
+        dataBaseSpell["Goblin"] = {
+            std::make_shared<Attack>(sneaky_stab),
+            std::make_shared<Support>(tricksters_guile),
+            nullptr,
+            nullptr
+        };
+    } 
 }
-
-

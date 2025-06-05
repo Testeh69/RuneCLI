@@ -3,94 +3,62 @@
 
 
 
-std::queue<IdFight> makeTurnFightQueue (Player& character, Monster& monster){
-    int vitesse_character = character.vitesse;
-    int vitesse_monster = monster.vitesse;
-    std::queue<IdFight> fight_queue;
+
+
+
+
+FightOneVsOne::FightOneVsOne(Player& personnage, Monster& monstre)
+    : personnage(personnage), monstre(monstre) {}
+
+
+void FightOneVsOne::menuFight(){
+    int choice;
+    std::cout<< "Your action : 1- Attaque  2- Bag 3- Fuir"<<std::endl;
+    std::cin>> choice;
+    this->choice_action = choice;
+};
+
+
+
+
+
+
+void FightOneVsOne::makeTurnFightQueue (){
+    while (!this->fight_queue.empty()) {
+        this->fight_queue.pop();
+    }    
+    int vitesse_character = this->personnage.vitesse;
+    int vitesse_monster = this->monstre.vitesse;
     if (vitesse_monster <= vitesse_character){
         while (vitesse_monster <vitesse_character){
-            fight_queue.push(IdFight::Player);
+            this->fight_queue.push(IdFight::Player);
             vitesse_character -= vitesse_monster;
         }
-        fight_queue.push(IdFight::Monster);
+        this->fight_queue.push(IdFight::Monster);
     }
     else{
         while (vitesse_monster > vitesse_character){
-            fight_queue.push(IdFight::Monster);
+            this->fight_queue.push(IdFight::Monster);
             vitesse_monster -= vitesse_character;
         }
-        fight_queue.push(IdFight::Player);
+        this->fight_queue.push(IdFight::Player);
     }
-    return fight_queue;
-}
+};
 
 
-
-
-
-int menuFight(){
-    int choice_action;
-    std::cout<< "Your action : 1- Attaque  2- Bag 3- Fuir"<<std::endl;
-    std::cin>> choice_action;
-    return choice_action;
-}
-
-
-int fight (Player& personnage, Monster& monstre){
-    std::cout << personnage.name << " VS " <<  monstre.name<< std::endl;
+void FightOneVsOne::displayInitDataFight(){
     std::cout<<std::endl;
-    int output_fight;
-    int choice_player;
-    int turn = 1;
+    std::cout << this->personnage.name << " VS " <<  this->monstre.name<< std::endl;
+    std::cout<<std::endl;
 
-    while (personnage.status_life && monstre.status_life){
-        personnage.displayData();
-        monstre.displayData(); 
-        std::queue<IdFight> turn_fight_queue = makeTurnFightQueue(personnage, monstre);
-        IdFight turn_character;
-        while (!turn_fight_queue.empty()){
-            turn_character = turn_fight_queue.front();
-            turn_fight_queue.pop();
-            switch (turn_character)
-            {
-            case IdFight::Player:
-                choice_player = menuFight();
-                switch (choice_player)
-                {
-                case 1:
-                    personnage.menuAttack();
-                    break;
-                    
-                
-                case 3:
-                     return 2;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            
-            case IdFight::Monster:
-                monstre.attack(personnage);
-            default:
-                break;
-            }
-            if (personnage.life <= 0) {
-                return 0;
-            }
-            else if (monstre.life <= 0){
-                return 1;
-            }
-        
-        }
-    }
-    
-} 
+};
 
 
 
 
-void displayFightResult(FightResult result) {
+
+
+void FightOneVsOne::displayFightResult(FightResult result) {
     switch (result) {
         case FightResult::Defeat:
             std::cout << "\n💀 You are dead!\n";

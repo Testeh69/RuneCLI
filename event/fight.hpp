@@ -1,9 +1,12 @@
-#include "../lifeform/player.hpp"
+#include "../lifeform/entities.hpp"
 #include <iostream>
 #include <queue>
 
 
 #pragma once
+
+
+
 
 
 
@@ -20,7 +23,35 @@ enum class IdFight{
     Monster = 1,
 };
 
-int menuFight();
+
+
+class FightOneVsOne{
+
+
+    public:
+    FightOneVsOne(Player& personnage , Monster& Monstre);
+
+    void loopFight();
+
+
+
+
+    private:
+    
+    void displayInitDataFight();
+    void menuFight();
+    void makeTurnFightQueue ();
+    void displayFightResult(FightResult result); 
+    
+    std::queue<IdFight> fight_queue;
+    Player& personnage;
+    Monster& monstre;
+    int choice_action;
+
+
+
+};
+
 
 int fight (Player& personnage, Monster& monstre);
 
