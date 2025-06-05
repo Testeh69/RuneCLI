@@ -1,11 +1,11 @@
-#include <spell.hpp>
+#include "spell.hpp"
 #include <unordered_map>
 #include <array>
 #include <string>
 #include <memory>
 
 
-#pragma once;
+#pragma once
 
 
 extern std::unordered_map<std::string, std::array<std::shared_ptr<Spell>, 4>> dataBaseSpell;

@@ -3,7 +3,9 @@
 #include <vector>
 #include <unordered_map>
 #include <array>
+#include <algorithm>
 #include "spell/spellDatabase.hpp"
+
 
 class LifeForm {
 public:
@@ -57,17 +59,26 @@ public:
 
     void displayJob();
 
+
+    void menuAttack ();
+
+
+
 private:
     int money = 0;
     std::string job = "Jobless";
     int lv = 1;
     int exp_gauge = 100;
     int exp_init = 0;
-    //slot_attack -> Hasmap<Attack>
+    std::unordered_map<std::string,std::shared_ptr<Spell>> slot_attack;
+
     //backpack -> Hashmap<Object>
     //equipement -> Hashmap<Equipement>
     
     
+    void getAttackInSlot (std::string job);
+
+
 };
 
 class Monster : public LifeForm {

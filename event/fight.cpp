@@ -1,5 +1,4 @@
 #include "fight.hpp"
-#include <queue>
 
 
 
@@ -59,7 +58,7 @@ int fight (Player& personnage, Monster& monstre){
                 switch (choice_player)
                 {
                 case 1:
-                    personnage.attack(monstre);
+                    personnage.menuAttack();
                     break;
                     
                 

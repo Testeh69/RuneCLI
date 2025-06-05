@@ -5,6 +5,9 @@
 #include "job/jobDatabase.hpp"
 
 
+
+// LIFEFORM method
+
 void LifeForm::attack(LifeForm& target) {
     int damage = this->attaque - target.defense;
     std::cout << this->name << " deals " << damage << " damage to " << target.name << std::endl;    std::cout<<std::endl;
@@ -23,6 +26,9 @@ void LifeForm::displayData(){
     std::cout<< this->life<<"/"<<this->life_original<< " PV"<<std::endl;
     std::cout<<std::endl;
 }
+
+
+// PLayer method
 
 
 Player::Player(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit) {
@@ -50,12 +56,38 @@ void Player::setJob(std::string new_job){
     this->magical_defense += define_job.magical_defense;
     this->defense += define_job.defense;
     this->vitesse += define_job.vitesse;
+    getAttackInSlot(new_job);
+}
+
+
+void Player::getAttackInSlot(std::string new_job){
+    std::array<std::shared_ptr<Spell>,4> array_slot = dataBaseSpell[new_job];
+
+    for (const auto& spell_ptr:array_slot){
+        if (spell_ptr != nullptr){
+            std::cout<<spell_ptr->name<<std::endl;
+            std::cout<<spell_ptr->description<<std::endl;
+            std::cout<<std::endl;
+            std::cout<<std::endl;
+            this-> slot_attack[spell_ptr -> name] =  spell_ptr;
+        }
+    }
 }
 
 
 void Player::displayJob(){
     std::cout<<"Vous avez choisie le job suivant ->"<<this->job<<std::endl;
 }
+
+
+void Player::menuAttack(){
+
+    std::cout<<"Choissisez l'action à entreprendre...";
+}
+
+
+
+// MOnster method
 
 
 Monster::Monster(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit){
@@ -76,6 +108,9 @@ Monster::Monster(int life, int att,int mag_pow, int mag_def, int def,int agility
 
 
 
+
+
+// Function
 Player createCharacter(){
     Player player = Player(100,10,10,10,10,10,10);
     std::string username;
