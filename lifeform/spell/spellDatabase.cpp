@@ -22,21 +22,23 @@ Attack mind_spike(
     "Magical",
     "Spirit",
     30,
-    1
+    1,
+    "life"
 );
 
 
-Support soul_bond(
-    "Soul Bond",
+Support soul_heal(
+    "Soul Heal",
     1,
     {"Soulweaver"},
     "A",
-    "Lie l'âme d'un allié à la sienne, partageant une partie des dégâts reçus et augmentant la régénération magique.",
+    "Soigne les pv grâce à la magie de l'âme.",
     "Single Ally",
     "Magical",
     "Spirit",
     20,  // boost régénération ou protection
-    4
+    4,
+    "life"
 );
 
 //Chronoblade
@@ -52,7 +54,8 @@ Attack chrono_slash(
     "Physical",
     "Time",
     40,        // direct damage
-    1          // 1 turn delay effect
+    1,
+    "life"          // 1 turn delay effect
 );
 
 
@@ -66,7 +69,8 @@ Support time_surge(
     "Magical",
     "Time",
     2.0f,      // 2x speed
-    2
+    2,
+    "vitesse"
 );
 
 
@@ -84,7 +88,8 @@ Attack soul_rend(
     "Magical",
     "Dark",
     25.5f,     // damage over time effect
-    3          // lasts for 3 turns
+    3,
+    "life"          // lasts for 3 turns
 );
 
 
@@ -98,7 +103,8 @@ Support veil_of_oblivion(
     "Magical",
     "Dark",
     0.75f,     // 25% resistance boost
-    4          // duration
+    4,
+    "defense"          // duration
 );
 
 //Luminary
@@ -113,7 +119,8 @@ Attack radiant_flare(
     "Magical",
     "Light",
     35.5f,
-    0
+    0,
+    "life"
 );
 
 Support blessing_of_dawn(
@@ -126,7 +133,9 @@ Support blessing_of_dawn(
     "Magical",
     "Light",
     1.25f,  // boost défense 25%
-    3
+    3,
+    "life"
+
 );
 
 
@@ -143,7 +152,8 @@ Attack sneaky_stab(
     "Physical",
     "None",
     20,
-    0
+    0,
+    "life"
 );
 
 Support tricksters_guile(
@@ -156,7 +166,8 @@ Support tricksters_guile(
     "Magical",
     "None",
     1.4f,  // 40% boost agilité/chance
-    2
+    2,
+    "agility"
 );
 
 
@@ -167,7 +178,7 @@ void loadDataSpell(const std::string& job) {
     if (job == "Soulweaver") {
         dataBaseSpell["Soulweaver"] = {
             std::make_shared<Attack>(mind_spike),
-            std::make_shared<Support>(soul_bond),
+            std::make_shared<Support>(soul_heal),
             nullptr,
             nullptr
         };

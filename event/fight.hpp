@@ -1,13 +1,20 @@
-#include "../lifeform/entities.hpp"
-#include <iostream>
-#include <queue>
-
-
 #pragma once
 
+#include "../lifeform/entities.hpp"
+#include "../lifeform/spell/spell.hpp"
+#include <iostream>
+#include <queue>
+#include <memory>
+#include <vector>
 
 
 
+
+
+struct effectSpellToken{
+    int token;
+    std::vector<std::shared_ptr<Spell>> spell_ptr;
+};
 
 
 enum class FightResult{
@@ -56,4 +63,4 @@ class FightOneVsOne{
 
 
 
-void fightLoop(Player& player);
+void Arena(Player& player);

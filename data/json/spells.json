@@ -11,7 +11,8 @@
     "attribute": "Magical",
     "attack_type": "Spirit",
     "effect": 30,
-    "turn": 1
+    "turn": 1,
+    "stat_targeted":"life"
   },
   {
     "id": "lien_d_ame",
@@ -25,7 +26,9 @@
     "attribute": "Magical",
     "support_type": "Spirit",
     "boost": 20,
-    "turn": 4
+    "turn": 4,
+    "stat_targeted":"life"
+
   },
   {
     "id": "entaille_temporelle",
@@ -39,7 +42,9 @@
     "attribute": "Physical",
     "attack_type": "Time",
     "effect": 40,
-    "turn": 1
+    "turn": 1,
+    "stat_targeted":"life"
+
   },
   {
     "id": "vague_temporelle",
@@ -53,7 +58,9 @@
     "attribute": "Magical",
     "support_type": "Time",
     "boost": 2.0,
-    "turn": 2
+    "turn": 2,
+    "stat_targeted":"vitesse"
+
   },
   {
     "id": "dechirure_d_ame",
@@ -67,7 +74,9 @@
     "attribute": "Magical",
     "attack_type": "Dark",
     "effect": 25.5,
-    "turn": 3
+    "turn": 3,
+    "stat_targeted":"life"
+
   },
   {
     "id": "voile_d_oubli",
@@ -81,7 +90,9 @@
     "attribute": "Magical",
     "support_type": "Dark",
     "boost": 0.75,
-    "turn": 4
+    "turn": 4,
+    "stat_targeted":"life"
+
   },
   {
     "id": "eclair_radiant",
@@ -95,7 +106,9 @@
     "attribute": "Magical",
     "attack_type": "Light",
     "effect": 35.5,
-    "turn": 0
+    "turn": 0,    
+    "stat_targeted":"life"
+
   },
   {
     "id": "benediction_de_l_aube",
@@ -109,7 +122,9 @@
     "attribute": "Magical",
     "support_type": "Light",
     "boost": 1.25,
-    "turn": 3
+    "turn": 3,    
+    "stat_targeted":"life"
+
   },
   {
     "id": "coup_en_douce",
@@ -123,7 +138,9 @@
     "attribute": "Physical",
     "attack_type": "None",
     "effect": 20,
-    "turn": 0
+    "turn": 0,
+    "stat_targeted":"life"
+
   },
   {
     "id": "ruse_du_filou",
@@ -137,6 +154,8 @@
     "attribute": "Magical",
     "support_type": "None",
     "boost": 1.4,
-    "turn": 2
+    "turn": 2,    
+    "stat_targeted":"life"
+
   }
 ]

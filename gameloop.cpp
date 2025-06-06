@@ -34,7 +34,7 @@ void gameLoop(){
     while(player.life > 0){
         int choice_player = menu();
         if (choice_player == 1){
-            fightLoop(player);
+            Arena(player);
         }
         else if  (choice_player == 2)
         {

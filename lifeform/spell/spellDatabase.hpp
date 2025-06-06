@@ -17,7 +17,7 @@ void loadDataSpell(const std::string& job);
 
 extern Attack mind_spike;
 
-extern Support soul_bond;
+extern Support soul_heal;
 
 
 

@@ -22,7 +22,7 @@ public:
     Player(int life, int att,int mag_pow, int mag_def, int def,int agility, int vit);
 
 
-    void setJob(std::string job);
+    void setJob(std::string new_job);
 
     void displayJob();
 
@@ -58,7 +58,7 @@ private:
 
 class Monster : public LifeForm {
 public:
-    Monster(const std::string& name, int life, int att,int mag_pow, int mag_def, int def,int agility, int vit);
+    Monster(std::string& name, int life, int att,int mag_pow, int mag_def, int def,int agility, int vit);
 
 private:
     std::string job;

@@ -47,6 +47,7 @@ public:
 
     std::unordered_map<int,std::shared_ptr<Spell>> slot_attack;
     
+   
 
     void attack(LifeForm& target);
 

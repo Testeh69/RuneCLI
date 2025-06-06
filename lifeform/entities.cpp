@@ -34,7 +34,6 @@ void Player::setJob(std::string new_job){
     this->defense += define_job.defense;
     this->vitesse += define_job.vitesse;
     loadDataSpell(new_job);
-
     getAttackInSlot(new_job);
 }
 

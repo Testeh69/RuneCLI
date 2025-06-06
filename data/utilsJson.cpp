@@ -30,7 +30,7 @@ std::unique_ptr<Spell> buildSpellObjectFromJsonFile(const std::string& path_json
             std::string zone = spell_json["target_spell_zone"].get<std::string>();
             std::string attr = spell_json["attribute"].get<std::string>();
             int turn = spell_json["turn"].get<int>();
-
+            std::string stat_targeted = spell_json["stat_targeted"].get<std::string>();
             if (type == "Attack") {
                 std::string attack_type = spell_json["attack_type"].get<std::string>();
                 std::variant<int,float> effect;
@@ -40,7 +40,7 @@ std::unique_ptr<Spell> buildSpellObjectFromJsonFile(const std::string& path_json
                     effect = spell_json["effect"].get<int>();
                 }
                 return std::make_unique<Attack>(
-                    name, lv, class_req, grade, desc, zone, attr, attack_type, effect, turn
+                    name, lv, class_req, grade, desc, zone, attr, attack_type, effect, turn, stat_targeted
                 );
             } else if (type == "Support") {
                 std::string support_type = spell_json["support_type"].get<std::string>();
@@ -51,7 +51,7 @@ std::unique_ptr<Spell> buildSpellObjectFromJsonFile(const std::string& path_json
                     boost = spell_json["boost"].get<int>();
                 }
                 return std::make_unique<Support>(
-                    name, lv, class_req, grade, desc, zone, attr, support_type, boost, turn
+                    name, lv, class_req, grade, desc, zone, attr, support_type, boost, turn, stat_targeted
                 );
             } else {
                 throw std::runtime_error("Type de sort inconnu : " + type);

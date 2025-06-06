@@ -56,10 +56,40 @@ void FightOneVsOne::displayInitDataFight(){
 
 int FightOneVsOne::fightLoop(){
     this->displayInitDataFight();
-    while (this->personnage.life>0 || this->monstre.life> 0){
+    
+    int turn = 1;
+    while (this->personnage.life>0 && this->monstre.life> 0){
+        std::cout<<"Tour: "<<turn<<std::endl;
         makeTurnFightQueue();
+        while (!this->fight_queue.empty() && (this->personnage.life>0 && this->monstre.life> 0)){
+            enum IdFight id = this->fight_queue.front();
+            this->fight_queue.pop();
+            switch(id){
+                case IdFight::Player:
+                    this->menuFight();
+                    switch (this->choice_action){
+                        case 1 :
+                            //Fight menu
+                            break;
+                        case 2 :
+                            //Bag menu
+                            break;
+                        case 3 :
+                            //Fuir
+                            break; 
+                    }
+                    break;
+                case IdFight::Monster:
+                    break;
+            }
+
+        };
+        
+        turn++;
+        
         
     }
+    return 0;
 };
 
 
@@ -84,7 +114,8 @@ void FightOneVsOne::displayFightResult(FightResult result) {
 
 
 void Arena(Player& player){
-        Monster goblin("Goblin", 30, 15, 2, 3, 8, 12, 10);
+        std::string name_monster = "Goblin";
+        Monster goblin(name_monster, 30, 15, 2, 3, 8, 12, 10);
         FightOneVsOne fightArena(player, goblin);
         int result = fightArena.fightLoop();
         
