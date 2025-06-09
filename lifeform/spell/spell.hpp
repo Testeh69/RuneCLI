@@ -24,8 +24,10 @@ class Spell {
     const std::string target_spell_zone,
     const std::string attribute,
     const std::string type,
-    const std::string stat_targeted
-    );
+    const std::string stat_targeted,
+    const int turn
+);
+    const int turn;
 
     const std::string name; // nom du sort
     const int lv_requirement; // lv requirement for the attack
@@ -64,7 +66,7 @@ class Attack: public Spell {
 
 
     const std::variant<int,float> effect;
-    const int turn;
+   
 
 
 };
@@ -91,8 +93,8 @@ class Support: public Spell{
 
 
     const std::variant<int,float> boost;
-    const int turn;
 
+    
 
 
 };

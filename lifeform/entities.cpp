@@ -76,35 +76,54 @@ std::shared_ptr<Spell> Player::getAttack(int index_attack){
     return spell_ptr_selected;
 }
 
-int Player::attack(LifeForm& monstre, std::shared_ptr<Spell> spell_ptr){
+int Player::attack(LifeForm& target, std::shared_ptr<Spell> spell_ptr){
+    //Retourne le nombre de tour que le sort va durer
+    
     std::string spell_name = spell_ptr->name;
     auto stat_targeted = spell_ptr->stat_targeted;
     std::string type_spell = spell_ptr->type;
+    std::string attribute_spell = spell_ptr->attribute;
     int damage = 0;
-    if (std::dynamic_pointer_cast<Attack>(spell_ptr)){
-        auto effect = std::dynamic_pointer_cast<Attack>(spell_ptr)->effect;
-        
-        if (stat_targeted == "life"){
-
-            if (type_spell == "Magical"){
-                damage = *std::get_if<int>(&effect)+(this->magical_power - monstre.magical_defense);
-                
-            }
-            else if (type_spell == "Physical"){
-                damage = *std::get_if<int>(&effect)+(this->attaque - monstre.defense);
-            
-            }
-            if (damage < 0) {
-                damage = 0; // Ensure damage is not negative
-            }
-            monstre.life -= damage;
+    int multiplier = 0;
+    auto elemental_resistance = target.elemental_resistance[attribute_spell];
+    
+    //Attack spell calculation
+  
+    if (auto attack_spell = std::dynamic_pointer_cast<Attack>(spell_ptr)) {
+        auto& effect = attack_spell->effect;
+        int base_damage = 0;
+        if (std::holds_alternative<float>(effect)) {
+            float ratio = std::get<float>(effect);
+            base_damage = static_cast<int>(ratio * target.life);
+        } else if (std::holds_alternative<int>(effect)) {
+            base_damage = std::get<int>(effect);
         }
 
-    }
-    else if (std::dynamic_pointer_cast<Support>(spell_ptr)){
+        float raw_damage = static_cast<float>(base_damage);
 
+        if (stat_targeted == "life") {
+            if (type_spell == "Magical") {
+                raw_damage += this->magical_power - target.magical_defense;
+            } 
+            else if (type_spell == "Physical") {
+                raw_damage += this->attaque - target.defense;
+            }
+
+            raw_damage *= (elemental_resistance / 100.0f);
+
+            int final_damage = std::max(0, static_cast<int>(raw_damage));
+            target.life -= final_damage;
+        }
     }
-    return 1;
+    //Support spell calculation
+    else if (auto support_spell = std::dynamic_pointer_cast<Support>(spell_ptr)) {
+        
+    }
+    else {
+        std::cerr << "Unknown spell type!" << std::endl;
+        return 0; // Return 0 if the spell type is unknown
+    }
+    return spell_ptr->turn;
     
 }
 

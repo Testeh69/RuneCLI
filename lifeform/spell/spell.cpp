@@ -12,7 +12,8 @@ Spell::Spell(
     const std::string target_spell_zone,
     const std::string attribute,
     const std::string type,
-    const std::string stat_targeted
+    const std::string stat_targeted,
+    const int turn
 ):
     name(name),
     lv_requirement(lv_requirement),
@@ -22,7 +23,8 @@ Spell::Spell(
     target_spell_zone(target_spell_zone),
     attribute(attribute),
     type(type),
-    stat_targeted(stat_targeted)
+    stat_targeted(stat_targeted),
+    turn(turn)
 {}
 
 
@@ -40,9 +42,8 @@ Attack::Attack(
     const int turn,
     const std::string& stat_targeted
 ): 
-    Spell(name,lv_requirement,class_requirement,grade,description,target_spell_zone,attribute,type, stat_targeted),
-    effect(effect),
-    turn(turn)
+    Spell(name,lv_requirement,class_requirement,grade,description,target_spell_zone,attribute,type, stat_targeted, turn),
+    effect(effect)
 {}
 
 
@@ -59,8 +60,7 @@ Support::Support(
     const int turn,
     const std::string & stat_targeted
 ):
-    Spell(name,lv_requirement,class_requirement,grade,description,target_spell_zone,attribute,type, stat_targeted),
-    boost(boost),
-    turn(turn)
+    Spell(name,lv_requirement,class_requirement,grade,description,target_spell_zone,attribute,type, stat_targeted, turn),
+    boost(boost)
 
 {}
