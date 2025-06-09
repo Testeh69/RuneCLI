@@ -36,8 +36,8 @@ class Spell {
     const std::string attribute; // Physique or magical
     const std::string type; // fire, water, none, etc ...
     const std::string stat_targeted; // stat the skills targeted
-
-
+    virtual ~Spell(){};
+    
 };
 
 

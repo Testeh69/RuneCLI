@@ -104,7 +104,7 @@ Support veil_of_oblivion(
     "Dark",
     0.75f,     // 25% resistance boost
     4,
-    "defense"          // duration
+    "defense"          
 );
 
 //Luminary

@@ -78,6 +78,32 @@ std::shared_ptr<Spell> Player::getAttack(int index_attack){
 
 int Player::attack(LifeForm& monstre, std::shared_ptr<Spell> spell_ptr){
     std::string spell_name = spell_ptr->name;
+    auto stat_targeted = spell_ptr->stat_targeted;
+    std::string type_spell = spell_ptr->type;
+    int damage = 0;
+    if (std::dynamic_pointer_cast<Attack>(spell_ptr)){
+        auto effect = std::dynamic_pointer_cast<Attack>(spell_ptr)->effect;
+        
+        if (stat_targeted == "life"){
+
+            if (type_spell == "Magical"){
+                damage = *std::get_if<int>(&effect)+(this->magical_power - monstre.magical_defense);
+                
+            }
+            else if (type_spell == "Physical"){
+                damage = *std::get_if<int>(&effect)+(this->attaque - monstre.defense);
+            
+            }
+            if (damage < 0) {
+                damage = 0; // Ensure damage is not negative
+            }
+            monstre.life -= damage;
+        }
+
+    }
+    else if (std::dynamic_pointer_cast<Support>(spell_ptr)){
+
+    }
     return 1;
     
 }

@@ -1,8 +1,8 @@
 [
   {
-    "id": "pic_mental",
+    "id": "Mind Spike",
     "type": "Attack",
-    "name": "Pic Mental",
+    "name": "Mind Spike",
     "lv_requirement": 1,
     "class_requirement": ["Soulweaver"],
     "grade": "B",
@@ -15,9 +15,9 @@
     "stat_targeted":"life"
   },
   {
-    "id": "lien_d_ame",
+    "id": "Soul Heal",
     "type": "Support",
-    "name": "Lien d'Âme",
+    "name": "Soul Heal",
     "lv_requirement": 1,
     "class_requirement": ["Soulweaver"],
     "grade": "A",
@@ -31,7 +31,7 @@
 
   },
   {
-    "id": "entaille_temporelle",
+    "id": "Chrono Slash",
     "type": "Attack",
     "name": "Entaille Temporelle",
     "lv_requirement": 1,
@@ -47,9 +47,9 @@
 
   },
   {
-    "id": "vague_temporelle",
+    "id": "Time Surge",
     "type": "Support",
-    "name": "Vague Temporelle",
+    "name": "Time Surge",
     "lv_requirement": 1,
     "class_requirement": ["Chronoblade"],
     "grade": "A",
@@ -63,9 +63,9 @@
 
   },
   {
-    "id": "dechirure_d_ame",
+    "id":  "Soul Rend",
     "type": "Attack",
-    "name": "Déchirure d'Âme",
+    "name":  "Soul Rend",
     "lv_requirement": 1,
     "class_requirement": ["Gravemind"],
     "grade": "A",
@@ -79,9 +79,9 @@
 
   },
   {
-    "id": "voile_d_oubli",
+    "id": "Veil of Oblivion",
     "type": "Support",
-    "name": "Voile d'Oubli",
+    "name": "Veil of Oblivion",
     "lv_requirement": 1,
     "class_requirement": ["Gravemind"],
     "grade": "S",
@@ -95,9 +95,9 @@
 
   },
   {
-    "id": "eclair_radiant",
+    "id": "Radiant Flare",
     "type": "Attack",
-    "name": "Éclair Radiant",
+    "name": "Radiant Flare",
     "lv_requirement": 1,
     "class_requirement": ["Luminary"],
     "grade": "B",
@@ -111,9 +111,9 @@
 
   },
   {
-    "id": "benediction_de_l_aube",
+    "id": "blessing_of_dawn",
     "type": "Support",
-    "name": "Bénédiction de l'Aube",
+    "name": "blessing_of_dawn",
     "lv_requirement": 1,
     "class_requirement": ["Luminary"],
     "grade": "A",
@@ -127,7 +127,7 @@
 
   },
   {
-    "id": "coup_en_douce",
+    "id": "Sneaky Stab",
     "type": "Attack",
     "name": "Coup en Douce",
     "lv_requirement": 1,
@@ -143,7 +143,7 @@
 
   },
   {
-    "id": "ruse_du_filou",
+    "id": "tricksters_guile",
     "type": "Support",
     "name": "Ruse du Filou",
     "lv_requirement": 1,

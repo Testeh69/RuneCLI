@@ -12,7 +12,7 @@
 #include "spell/spellDatabase.hpp"
 #include "lifeform.hpp"
 #include "job/jobDatabase.hpp"
-
+#include "../data/utilsJson.hpp"
 
 
 
@@ -30,6 +30,8 @@ public:
     int attack(LifeForm& monstre, std::shared_ptr<Spell> spell_ptr);
 
     int menuAttack ();
+    std::shared_ptr<Spell> getAttack (int index_attack);
+
 
 
 
@@ -47,7 +49,6 @@ private:
 
     void displayAttack ();
 
-    std::shared_ptr<Spell> getAttack (int index_attack);
 
     void displayMenu();
 

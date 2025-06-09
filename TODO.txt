@@ -8,6 +8,7 @@ Finish:
 
 
 En cours:
+
 - add 1 depth for the menu for choosing the attack -> En cours
 - modify the fight menu -> En cours
 

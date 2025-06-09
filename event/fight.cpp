@@ -69,7 +69,24 @@ int FightOneVsOne::fightLoop(){
                     this->menuFight();
                     switch (this->choice_action){
                         case 1 :
+                            int result = personnage.menuAttack();
+                            if (result<5 && result>0){
+                                std::shared_ptr<Spell> spell_ptr = personnage.getAttack(result);
+                                int damage = personnage.attack(monstre, spell_ptr);
+                                std::cout << personnage.name << " attacks " << monstre.name << " with " << spell_ptr->name << " causing " << damage << " damage." << std::endl;
+                                monstre.life -= damage;
+                                if (monstre.life <= 0) {
+                                    displayFightResult(FightResult::Victory);
+                                    return 1; // Victory
+                                }
+                            } else {
+                                std::cout << "Returning to menu..." << std::endl;
+                            }
+                            // Display the player's attacks
+                            // Get the player's choice of attack
                             //Fight menu
+                            // Display attack menu
+                            // Get the player choice (attack or return)
                             break;
                         case 2 :
                             //Bag menu
