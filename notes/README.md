@@ -11,8 +11,12 @@ Each file here explores specific aspects of the project such as damage computati
 - ✅ `damage_formula.md`  
   Research and modeling of mathematical formulas for damage calculation, including attack, spell power, defense, and elemental resistance.
 
+- ✅ `graph_based_algorithm.md`  
+  Research and modeling of mathematical new rl model for my monster AI
 
 
+
+  
 ---
 
 ## 🛠 Future Notes Ideas
