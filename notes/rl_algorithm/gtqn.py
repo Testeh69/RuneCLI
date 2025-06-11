@@ -39,7 +39,21 @@ class GTQNAgent:
         self.graph = {}  # {state: {next_state: [remanence, reward]}}
         self.remanence_init = remanence_init
 
-    def train(self, epochs=500, bonus_remanence=100, loss_memo=1, depth=50, espilon=0.1):
+
+    def decay_memory(self, loss_memo=1):
+        keys_to_remove = []
+        for from_state in self.graph:
+            for to_state in list(self.graph[from_state].keys()):
+                self.graph[from_state][to_state][0] -= loss_memo
+                if self.graph[from_state][to_state][0] <= 0:
+                    keys_to_remove.append((from_state, to_state))
+
+        for from_state, to_state in keys_to_remove:
+            del self.graph[from_state][to_state]
+            if not self.graph[from_state]:
+                del self.graph[from_state]
+
+    def train(self, epochs=500, bonus_remanence=5, loss_memo=1, depth=50, espilon=0.1):
         for epoch in range(epochs):
             state = self.env.start
             total_reward = 0
@@ -71,20 +85,11 @@ class GTQNAgent:
                     self.graph[state][next_state] = [self.remanence_init, reward]
                 else:
                     self.graph[state][next_state][0] += bonus_remanence
-                    self.graph[state][next_state][1] += -reward
+                    self.graph[state][next_state][1] += reward
                 
                 # Oublie partielle
-                keys_to_remove = []
-                for from_state in self.graph:
-                    for to_state in list(self.graph[from_state].keys()):
-                        self.graph[from_state][to_state][0] -= loss_memo
-                        if self.graph[from_state][to_state][0] <= 0:
-                            keys_to_remove.append((from_state, to_state))
-
-                for from_state, to_state in keys_to_remove:
-                    del self.graph[from_state][to_state]
-                    if not self.graph[from_state]:
-                        del self.graph[from_state]
+                self.decay_memory(loss_memo)
+                
 
                 state = next_state
                 total_reward += reward
@@ -93,7 +98,7 @@ class GTQNAgent:
             print(f"Epoch {epoch+1}: Start={self.env.start}, Goal={self.env.goal}, State = {state} Total reward = {total_reward:.2f}, Steps = {step}")
         return self.graph
     
-    def test(self, start=None, goal=None):
+    def test(self, start=None, goal=None, depth=50, loss_memo=1, gain = 3):
         visited = []
         if start is None:
             start = self.env.start
@@ -104,9 +109,9 @@ class GTQNAgent:
         total_reward = 0
         steps = 0
 
-        while state != goal:
+        while state != goal and steps < depth:
+            print(f"Step {steps+1}: Current State = {state}, Total Reward = {total_reward:.2f}")
             visited.append(state)
-        
             if state not in self.graph or not self.graph[state]:
                 list_action = []
                 for action in self.env.actions:
@@ -115,15 +120,23 @@ class GTQNAgent:
                         continue
                     reward = self.env.calculate_reward(next_state)
                     list_action.append((next_state, reward))
+                if not list_action:
+                    print("Dead end reached — no unvisited neighbors.")
+                    break
                 next_state, reward = max(list_action, key=lambda x: x[1])
                 self.graph[state] = {next_state: [self.remanence_init, reward]}
             else:
                 next_state, (remanence, reward) = max(self.graph[state].items(), key=lambda x: x[1][1])
+                self.graph[state][next_state][0] += gain 
             total_reward += reward
             state = next_state
             steps += 1
 
-        print(f"Test completed: Start={start}, Goal={goal}, Final State={state}, Total Reward={total_reward:.2f}, Steps={steps}")
+            self.decay_memory(loss_memo)
+        if state != goal:
+            print(f"Test failed: Start={start}, Goal={goal}, Final State={state}, Total Reward={total_reward:.2f}, Steps={steps}")
+        else:
+            print(f"Test completed: Start={start}, Goal={goal}, Final State={state}, Total Reward={total_reward:.2f}, Steps={steps}")
 
     def visualize_graph(self):
         G = nx.DiGraph()
@@ -205,6 +218,8 @@ def compare_runtimes():
     print("\n--- Résumé ---")
     print(f"Q-learning training time: {q_time:.4f} s")
     print(f"GTQN training time: {gtqn_time:.4f} s")
+    gtqn_agent.visualize_graph()
+    gtqn_agent.test(start=(9,5), goal=(4,4), depth=100)
     gtqn_agent.visualize_graph()
 
 if __name__ == "__main__":
