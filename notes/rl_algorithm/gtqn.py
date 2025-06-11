@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import time
 
+
+
+
+## GTQ-N (Graph-based Thinking Q-Network) Agent Implementation
+
 class Environment:
     def __init__(self, grid_size=5, start=(0, 0), goal=(4, 4)):
         self.grid_size = grid_size
@@ -24,85 +29,117 @@ class Environment:
         return (x, y)
 
     def calculate_reward(self, state):
-        # Plus l'état est proche de l'objectif, meilleur est le reward (négatif car on minimise la distance)
         return -np.linalg.norm(np.array(state) - np.array(self.goal))
 
 
 class GTQNAgent:
-    def __init__(self, env: Environment, remanence_max=10, epsilon=0.2):
+
+    def __init__(self, env: Environment, remanence_init=4):
         self.env = env
-        self.graph = {}  # {(state, action): {"next_state", "q_value", "remanence"}}
-        self.remanence_max = remanence_max
-        self.epsilon = epsilon
+        self.graph = {}  # {state: {next_state: [remanence, reward]}}
+        self.remanence_init = remanence_init
 
-    def choose_action(self, state):
-        if random.random() < self.epsilon:
-            return random.choice(self.env.actions)
-        best_q = float('-inf')
-        best_action = random.choice(self.env.actions)
-        for action in self.env.actions:
-            key = (state, action)
-            q = self.graph.get(key, {"q_value": -100})["q_value"]
-            if q > best_q:
-                best_q = q
-                best_action = action
-        return best_action
-
-    def update(self, state, action, next_state, reward):
-        key = (state, action)
-        if key not in self.graph:
-            self.graph[key] = {
-                "next_state": next_state,
-                "q_value": reward,
-                "remanence": self.remanence_max
-            }
-        else:
-            self.graph[key]["q_value"] = max(self.graph[key]["q_value"], reward)
-            self.graph[key]["remanence"] = min(self.graph[key]["remanence"] + 1, self.remanence_max)
-
-    def decay_remanence(self):
-        for key in list(self.graph.keys()):
-            self.graph[key]["remanence"] -= 1
-            if self.graph[key]["remanence"] <= 0:
-                del self.graph[key]
-
-    def train(self, epochs=100, depth=10):
+    def train(self, epochs=500, bonus_remanence=100, loss_memo=1, depth=50, espilon=0.1):
         for epoch in range(epochs):
             state = self.env.start
-            for step in range(depth):
-                action = self.choose_action(state)
-                next_state = self.env.move(state, action)
-                reward = self.env.calculate_reward(next_state)
-                self.update(state, action, next_state, reward)
+            total_reward = 0
+            step = 0
+            while state != self.env.goal and step < depth:
+                # Choisir l'action avec le meilleur reward immédiat (greedy)
+                list_max = []
+                if random.random() < espilon:
+                    # Exploration aléatoire
+                    action = random.choice(self.env.actions)
+                    next_state = self.env.move(state, action)
+                    reward = self.env.calculate_reward(next_state)
+                else:
+                    for action in self.env.actions:
+                        next_s = self.env.move(state, action)
+                        r = self.env.calculate_reward(next_s)
+                        list_max.append((action, r, next_s))
+
+                    # Choix de l'action qui minimise la distance (maximise reward négatif)
+                
+                
+                    best = max(list_max, key=lambda x: x[1])
+                    action, reward, next_state = best
+
+                if state not in self.graph:
+                    self.graph[state] = {}
+
+                if next_state not in self.graph[state]:
+                    self.graph[state][next_state] = [self.remanence_init, reward]
+                else:
+                    self.graph[state][next_state][0] += bonus_remanence
+                    self.graph[state][next_state][1] += -reward
+                
+                # Oublie partielle
+                keys_to_remove = []
+                for from_state in self.graph:
+                    for to_state in list(self.graph[from_state].keys()):
+                        self.graph[from_state][to_state][0] -= loss_memo
+                        if self.graph[from_state][to_state][0] <= 0:
+                            keys_to_remove.append((from_state, to_state))
+
+                for from_state, to_state in keys_to_remove:
+                    del self.graph[from_state][to_state]
+                    if not self.graph[from_state]:
+                        del self.graph[from_state]
+
                 state = next_state
-                if state == self.env.goal:
-                    break
-            self.decay_remanence()
-            print(f"Epoch {epoch + 1}: total edges = {len(self.graph)}")
+                total_reward += reward
+                step += 1
+
+            print(f"Epoch {epoch+1}: Start={self.env.start}, Goal={self.env.goal}, State = {state} Total reward = {total_reward:.2f}, Steps = {step}")
+        return self.graph
+    
+    def test(self, start=None, goal=None):
+        visited = []
+        if start is None:
+            start = self.env.start
+        if goal is None:
+            goal = self.env.goal
+
+        state = start
+        total_reward = 0
+        steps = 0
+
+        while state != goal:
+            visited.append(state)
+        
+            if state not in self.graph or not self.graph[state]:
+                list_action = []
+                for action in self.env.actions:
+                    next_state = self.env.move(state, action)
+                    if next_state in visited:
+                        continue
+                    reward = self.env.calculate_reward(next_state)
+                    list_action.append((next_state, reward))
+                next_state, reward = max(list_action, key=lambda x: x[1])
+                self.graph[state] = {next_state: [self.remanence_init, reward]}
+            else:
+                next_state, (remanence, reward) = max(self.graph[state].items(), key=lambda x: x[1][1])
+            total_reward += reward
+            state = next_state
+            steps += 1
+
+        print(f"Test completed: Start={start}, Goal={goal}, Final State={state}, Total Reward={total_reward:.2f}, Steps={steps}")
 
     def visualize_graph(self):
         G = nx.DiGraph()
-        # Ajout des arêtes
-        for (state, action), data in self.graph.items():
-            next_state = data["next_state"]
-            label = f"{action}\nQ={round(data['q_value'], 1)}\nR={data['remanence']}"
-            G.add_edge(state, next_state, label=label)
+        for from_state, transitions in self.graph.items():
+            for to_state, (remanence, reward) in transitions.items():
+                label = f"R={round(reward,1)}\nM={int(remanence)}"
+                G.add_edge(from_state, to_state, label=label)
 
-        # Recueillir tous les noeuds (sources + destinations)
-        nodes = set()
-        for (state, _), data in self.graph.items():
-            nodes.add(state)
-            nodes.add(data["next_state"])
-
-        # Calculer les positions de tous les noeuds (x = y coord, y = -x coord pour inversion verticale)
-        pos = {node: (node[1], -node[0]) for node in nodes}
-
+        pos = {node: (node[1], -node[0]) for node in G.nodes()}
         plt.figure(figsize=(10, 8))
         nx.draw(G, pos, with_labels=True, node_color="skyblue", node_size=800, edge_color='gray', font_size=8)
         nx.draw_networkx_edge_labels(G, pos, edge_labels=nx.get_edge_attributes(G, 'label'), font_size=6)
         plt.title("GTQN - Graphe de transitions apprises")
         plt.axis('off')
         plt.show()
+
 
 
 class QLearningAgent:
@@ -168,6 +205,7 @@ def compare_runtimes():
     print("\n--- Résumé ---")
     print(f"Q-learning training time: {q_time:.4f} s")
     print(f"GTQN training time: {gtqn_time:.4f} s")
+    gtqn_agent.visualize_graph()
 
 if __name__ == "__main__":
     compare_runtimes()

@@ -1,6 +1,9 @@
 
-### Graph Thinking Q-NET (GTQN)
+###  Graph Thinking Q-NET (GTQN)
 
+
+
+#### 1) Introduction
 
 Le graph thinking Q-net (autre idée de nom) est une idée que j'ai eu basé sur plusieurs principes ou inspiration:
 
@@ -9,70 +12,95 @@ Le graph thinking Q-net (autre idée de nom) est une idée que j'ai eu basé sur
     - Une méthode de rémanance (poids au graphs, -1 si c'est lien sont pas utilisées, + 1 si les liens sont utilisées, si ils tombent  à 0 ils disparaissent)
 
 
-GOAL:
+#### 2) GOAL:
+
     - l'objectif de cette agent n'est non pas de l'entrainer sur un env mais plutot de lui donner des idées de raisonnement partiel sur son env qu'il pourra utiliser lors de son application et update ses poids.
 
-    """ Il doit être self learner """
+« Apprend et évolue par lui-même, sans supervision externe »
 
-PSEUDO-CODE
+#### 📐 3) Métrique – Réflexion sur les critères de proximité
+
+    Similarité cosinus : évalue l’orientation entre deux vecteurs.
+
+    Norme euclidienne : mesure la distance réelle entre deux points.
+
+    Rémanence : reflète la fréquence d’utilisation d’un chemin ; plus un chemin est utilisé, plus il est probablement utile.
+
+🧪 Expérimentations
+
+J’ai testé plusieurs combinaisons de métriques pour estimer la proximité entre deux points :
+
+    La distance euclidienne seule
+
+    La similarité cosinus seule
+
+    Des combinaisons pondérées des deux
+
+    Une formulation de type exp(cos_sim) * dist
+
+🎯 Observations
+
+    La distance euclidienne seule donne les résultats les plus cohérents, sans être biaisée par l’orientation des vecteurs.
+
+    Avec des formules impliquant la similarité cosinus, on peut se retrouver avec des situations absurdes, comme considérer que (-6, -6) est plus proche de (6, 6) que (5, 6), simplement parce qu’ils pointent dans la même direction.
+
+    La direction introduite par le cosinus perturbe trop l’ordre de proximité réel.
+
+⚠️ Limite actuelle
+
+La distance euclidienne ne prend pas en compte la rémanence. Or, cette notion est importante :
+
+    Un chemin souvent emprunté est probablement plus utile ou plus fiable.
+
+Il reste donc à explorer comment intégrer ce facteur dans la métrique finale.
+ A voir
 
 
-    INITIAL_STATE = S0
-    FINAL_STATE = Sf
-    MAX_REMANENCE = 10
-    GraphThinking = {}
-    EPOCHS = 100
-    DEPTH = 6
+#### 4) PSEUDO-CODE
 
-    def getState(action, current_state):
-        # Génère un nouvel état à partir de l’action et de l’état courant
-        return next_state
+    ALTERNE ENTRE UN A* ou autre algorithme de path finding et une politique greedy
 
-    def calculateReward(state):
-        # Reward basé sur la distance entre state et FINAL_STATE
-        return -norm(state - FINAL_STATE)
+    Je définis un état initial So
+    Je définis un état final Sf
+    Je définis un état actuel Sa
+    Je définis une constante rémanante_init = 5
 
-    def loadActions(state):
-        # Renvoie une liste d’actions possibles à partir de cet état
-        return actions
+    Sa = So
 
-    def takeAction(state, action):
-        return getState(action, state)
+    Je définis une list_choice_minimal
+    Je définis le graph de pensée graph
+    Je définis un treshold
 
 
-    FUNCTION : 
-    for epoch in range(EPOCHS):
-        current_state = INITIAL_STATE
-        
-        for step in range(DEPTH):
-            actions = loadActions(current_state)
-            result = {}
+    TANT QUE Sa != Sf
+        A*(Sa,Sf)
+        -> Trouvé une solution:
+            oui-> applique + (ajoute 1 points de remanentes pour chaque path ou l'on passe)
+            non-> Voyage jusqu'aux points de fin 
+                    Calcule la metrique
+                    Ajout a la list_choice_minimal
+                    ->Si il y a des chemins non explorées:
+                        Pour tous les chemins non explorées
+                            Snexp = step(action,Sa)
+                            dist_eucl(snexp)
+                            Ajout a la list_choice_minimal
+                    next_step = argmin de list_choice_minimal
+                    si next_step est dans graph[Sa]:
+                        Oui-> ajoute une remanente +2
+                        Non-> ajoute graph[sa] = { {lieu: step(next_step,Sa), Remanente: remanente_init}}
+                    Sa = step(next_step,Sa)
+        Applique une remanentede - 1 a tous le graph
+        Supprime les path dons les points ont une remanente inférieur à threshold
 
-            for action in actions:
-                next_state = takeAction(current_state, action)
-                reward = calculateReward(next_state)
-                key = (current_state, action)
-                
-                # Met à jour ou crée la transition dans le graphe
-                if key not in GraphThinking:
-                    GraphThinking[key] = {
-                        "next_state": next_state,
-                        "q_value": reward,
-                        "remanence": MAX_REMANENCE
-                    }
-                else:
-                    GraphThinking[key]["q_value"] = max(GraphThinking[key]["q_value"], reward)
-                    GraphThinking[key]["remanence"] += 1
+                            
             
-            # Choix greedy
-            best_action = max(actions, key=lambda a: GraphThinking.get((current_state, a), {"q_value": -float('inf')})["q_value"])
-            current_state = takeAction(current_state, best_action)
 
-        # Rémanence decay
-        for key in list(GraphThinking.keys()):
-            GraphThinking[key]["remanence"] -= 1
-            if GraphThinking[key]["remanence"] <= 0:
-                del GraphThinking[key]
+
+
+
+
+
+
 
                         
 
