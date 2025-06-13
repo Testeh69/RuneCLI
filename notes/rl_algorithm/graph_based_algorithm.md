@@ -11,6 +11,12 @@ Le graph thinking Q-net (autre idée de nom) est une idée que j'ai eu basé sur
     - Le Q-learning (policy greedy)
     - Une méthode de rémanance (poids au graphs, -1 si c'est lien sont pas utilisées, + 1 si les liens sont utilisées, si ils tombent  à 0 ils disparaissent)
 
+    - Les étapes d'un algorithme de Reinforcement learning
+        ->Observe
+        ->Prend une action -> Policy
+        ->Observe le résultat de l'action dans son réseau -> Metrics
+        ->Réajuste les poids -> Formule de distribution des connaissances
+
 
 #### 2) GOAL:
 
@@ -53,7 +59,7 @@ La distance euclidienne ne prend pas en compte la rémanence. Or, cette notion e
     Un chemin souvent emprunté est probablement plus utile ou plus fiable.
 
 Il reste donc à explorer comment intégrer ce facteur dans la métrique finale.
- A voir
+
 
 
 #### 4) PSEUDO-CODE
@@ -89,7 +95,7 @@ Il reste donc à explorer comment intégrer ce facteur dans la métrique finale.
                         Oui-> ajoute une remanente +2
                         Non-> ajoute graph[sa] = { {lieu: step(next_step,Sa), Remanente: remanente_init}}
                     Sa = step(next_step,Sa)
-        Applique une remanentede - 1 a tous le graph
+        Applique une remanence - 1 a tous le graph
         Supprime les path dons les points ont une remanente inférieur à threshold
 
                             

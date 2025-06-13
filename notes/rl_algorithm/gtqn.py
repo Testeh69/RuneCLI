@@ -7,14 +7,19 @@ import time
 
 
 
-## GTQ-N (Graph-based Thinking Q-Network) Agent Implementation
-
 class Environment:
     def __init__(self, grid_size=5, start=(0, 0), goal=(4, 4)):
         self.grid_size = grid_size
         self.start = start
         self.goal = goal
         self.actions = ['UP', 'DOWN', 'LEFT', 'RIGHT']
+
+    def reset(self):
+        self.start = (np.random.randint(0, self.grid_size), np.random.randint(0, self.grid_size))
+        self.goal = (np.random.randint(0, self.grid_size), np.random.randint(0, self.grid_size))
+        while self.goal == self.start:
+            self.goal = (np.random.randint(0, self.grid_size), np.random.randint(0, self.grid_size))
+        return self.start, self.goal
 
     def move(self, state, action):
         x, y = state
@@ -32,20 +37,61 @@ class Environment:
         return -np.linalg.norm(np.array(state) - np.array(self.goal))
 
 
+## GTQ-N (Graph-based Thinking Q-Network) Agent Implementation
+
+
+"""
+Observations:
+- L'agorithme ne converge pas
+- Le graph est construit mais il perd de la mémoire au fil du temps
+
+"""
 class GTQNAgent:
 
-    def __init__(self, env: Environment, remanence_init=4):
+    def __init__(self, env: Environment, remanence_init=4,reward_target_sucess=10):
         self.env = env
+        self.reward_target_sucess = reward_target_sucess
         self.graph = {}  # {state: {next_state: [remanence, reward]}}
         self.remanence_init = remanence_init
+    
+    def metrics(self, state = None, remanence = 1, alpha = 0.5, beta = 0.5):
+        """
+        remanence: Importance de la lisaison dans le state
+        Plus le chemin est utilisé, plus la remanence est elevée
+        Plus la remanence est élevée, plus le chemin est important
+        car il ressort dans beaucoup de chemins
+        """
+        actual_state = state if state is not None else self.env.start
+        target_state = self.env.goal
+        distance = -np.linalg.norm(np.array(actual_state) - np.array(target_state))
+        return  alpha*remanence + beta*distance       
+
+    def policy(self,state, epsilon = 0.5, decay = 0.1, remanence = 1):
+        number = random.random()
+        if number < epsilon:
+            action = random.choice(self.env.actions)
+            next_state = self.env.move(state, action)
+            reward = self.metrics(next_state, remanence)
+        else:
+            reward_posible_actions = []
+            for action in self.env.actions:
+                next_state = self.env.move(state, action)
+                reward = self.metrics(next_state, remanence)
+                reward_posible_actions.append((action, reward, next_state))
+            action, reward, next_state = max(reward_posible_actions, key=lambda x: x[1])
+        updated_epsilon = epsilon* np.exp(-decay)
+        return next_state, updated_epsilon, reward
+    
 
 
-    def decay_memory(self, loss_memo=1):
+
+
+    def decay_memory(self, loss_neurone=1):
         keys_to_remove = []
-        for from_state in self.graph:
+        for from_state in list(self.graph.keys()):
             for to_state in list(self.graph[from_state].keys()):
-                self.graph[from_state][to_state][0] -= loss_memo
-                if self.graph[from_state][to_state][0] <= 0:
+                self.graph[from_state][to_state] -= loss_neurone
+                if self.graph[from_state][to_state] <= 0:
                     keys_to_remove.append((from_state, to_state))
 
         for from_state, to_state in keys_to_remove:
@@ -53,96 +99,85 @@ class GTQNAgent:
             if not self.graph[from_state]:
                 del self.graph[from_state]
 
-    def train(self, epochs=500, bonus_remanence=5, loss_memo=1, depth=50, espilon=0.1):
+    
+    def distribute_reward(self, history, total_rewards, test_validated = 0):
+        len_chain = len(history)
+        for x in range(1,len(history)-1):
+            state = history[x-1]
+            next_state = history[x]
+            if state in self.graph and next_state in self.graph[state]:
+                self.graph[state][next_state] += np.exp(-len_chain)+total_rewards* test_validated
+            else:
+                self.graph[state][next_state] = self.remanence_init + np.exp(-len_chain) + total_rewards * test_validated
+
+
+    def train(self, epochs=500,life = 10,resseting_test = 0.4, bonus_remanence=5, loss_memo=1, depth=50, epsilon=0.1):
+        test_validated = 0
+        queue_test_not_validated = []
+        history = []
+        epsilon = 1
         for epoch in range(epochs):
             state = self.env.start
+            self.graph[state]= {}
             total_reward = 0
-            step = 0
-            while state != self.env.goal and step < depth:
-                # Choisir l'action avec le meilleur reward immédiat (greedy)
-                list_max = []
-                if random.random() < espilon:
-                    # Exploration aléatoire
-                    action = random.choice(self.env.actions)
-                    next_state = self.env.move(state, action)
-                    reward = self.env.calculate_reward(next_state)
-                else:
-                    for action in self.env.actions:
-                        next_s = self.env.move(state, action)
-                        r = self.env.calculate_reward(next_s)
-                        list_max.append((action, r, next_s))
-
-                    # Choix de l'action qui minimise la distance (maximise reward négatif)
-                
-                
-                    best = max(list_max, key=lambda x: x[1])
-                    action, reward, next_state = best
-
-                if state not in self.graph:
-                    self.graph[state] = {}
-
-                if next_state not in self.graph[state]:
-                    self.graph[state][next_state] = [self.remanence_init, reward]
-                else:
-                    self.graph[state][next_state][0] += bonus_remanence
-                    self.graph[state][next_state][1] += reward
-                
-                # Oublie partielle
-                self.decay_memory(loss_memo)
-                
-
-                state = next_state
+            steps = 0
+            while state != self.env.goal and steps < depth:
+                next_state, epsilon, reward = self.policy(state, epsilon)
+                history.append((state))
                 total_reward += reward
-                step += 1
+                steps+=1
+                if next_state not in self.graph[state]:
+                    self.graph[state][next_state] = self.remanence_init
+                    self.graph[next_state] = {}
+                    state = next_state
+                else:
+                    self.graph[state][next_state] += bonus_remanence
+                    state = next_state
+            
+            if state == self.env.goal:
+                total_reward += self.reward_target_sucess
+                test_validated += 1
+                if (self.env.start, self.env.goal) in queue_test_not_validated:
+                    queue_test_not_validated.remove((self.env.start, self.env.goal))
 
-            print(f"Epoch {epoch+1}: Start={self.env.start}, Goal={self.env.goal}, State = {state} Total reward = {total_reward:.2f}, Steps = {step}")
-        return self.graph
-    
-    def test(self, start=None, goal=None, depth=50, loss_memo=1, gain = 3):
-        visited = []
-        if start is None:
-            start = self.env.start
-        if goal is None:
-            goal = self.env.goal
-
-        state = start
-        total_reward = 0
-        steps = 0
-
-        while state != goal and steps < depth:
-            print(f"Step {steps+1}: Current State = {state}, Total Reward = {total_reward:.2f}")
-            visited.append(state)
-            if state not in self.graph or not self.graph[state]:
-                list_action = []
-                for action in self.env.actions:
-                    next_state = self.env.move(state, action)
-                    if next_state in visited:
-                        continue
-                    reward = self.env.calculate_reward(next_state)
-                    list_action.append((next_state, reward))
-                if not list_action:
-                    print("Dead end reached — no unvisited neighbors.")
-                    break
-                next_state, reward = max(list_action, key=lambda x: x[1])
-                self.graph[state] = {next_state: [self.remanence_init, reward]}
+                print(f"Epoch {epoch+1}: Goal reached in {steps} steps with total reward {total_reward:.2f}")
+                life = 10
+                self.env.reset()
+                print(f"New start: {self.env.start}, New goal: {self.env.goal}")
+               
             else:
-                next_state, (remanence, reward) = max(self.graph[state].items(), key=lambda x: x[1][1])
-                self.graph[state][next_state][0] += gain 
-            total_reward += reward
-            state = next_state
-            steps += 1
-
+                print(f"Epoch {epoch+1}: Goal not reached in {steps} steps, total reward {total_reward:.2f}")
+                queue_test_not_validated.append((self.env.start, self.env.goal))
+                life -= 1
+            self.distribute_reward(history, total_reward, test_validated)
             self.decay_memory(loss_memo)
-        if state != goal:
-            print(f"Test failed: Start={start}, Goal={goal}, Final State={state}, Total Reward={total_reward:.2f}, Steps={steps}")
-        else:
-            print(f"Test completed: Start={start}, Goal={goal}, Final State={state}, Total Reward={total_reward:.2f}, Steps={steps}")
+            history.clear()
+            if life <= 0:
+                life = 10
+                if queue_test_not_validated:
+                    draw = np.random.random()
+                    if draw < resseting_test:
+                        self.env.start, self.env.goal = random.choice(queue_test_not_validated)
+                        print(f"Resetting test with start={self.env.start}, goal={self.env.goal}")
+
+        print(f"Training completed: Total epochs = {epochs}, Validated tests = {test_validated}, Remaining tests = {len(queue_test_not_validated)}")
+        if queue_test_not_validated:
+            print("Unvalidated tests remaining:")
+            for start, goal in queue_test_not_validated:
+                print(f"Start: {start}, Goal: {goal}")
+        return self.graph
+        
+    
+
+   
+      
+        
 
     def visualize_graph(self):
         G = nx.DiGraph()
         for from_state, transitions in self.graph.items():
-            for to_state, (remanence, reward) in transitions.items():
-                label = f"R={round(reward,1)}\nM={int(remanence)}"
+            for to_state, remanence in transitions.items():
+                label = f"REMANENCE={int(remanence)}"
                 G.add_edge(from_state, to_state, label=label)
 
         pos = {node: (node[1], -node[0]) for node in G.nodes()}
@@ -198,29 +233,28 @@ class QLearningAgent:
             print(f"Epoch {epoch+1}: Total reward = {total_reward:.2f}, Steps = {step+1}")
 
 def compare_runtimes():
-    env = Environment()
+    env = Environment(grid_size=20)
 
     q_agent = QLearningAgent(env)
     gtqn_agent = GTQNAgent(env)
-
+    """
     print("Training Q-learning agent...")
     start = time.time()
     q_agent.train(epochs=200, max_steps=20)
     q_time = time.time() - start
     print(f"Q-learning training time: {q_time:.4f} seconds")
-
+"""    
     print("\nTraining GTQN agent...")
     start = time.time()
-    gtqn_agent.train(epochs=200, depth=20)
+    gtqn_agent.train(epochs=50, depth=20)
     gtqn_time = time.time() - start
     print(f"GTQN training time: {gtqn_time:.4f} seconds")
 
     print("\n--- Résumé ---")
-    print(f"Q-learning training time: {q_time:.4f} s")
+    #print(f"Q-learning training time: {q_time:.4f} s")
     print(f"GTQN training time: {gtqn_time:.4f} s")
     gtqn_agent.visualize_graph()
-    gtqn_agent.test(start=(9,5), goal=(4,4), depth=100)
-    gtqn_agent.visualize_graph()
+ 
 
 if __name__ == "__main__":
     compare_runtimes()

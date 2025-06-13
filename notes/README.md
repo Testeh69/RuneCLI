@@ -21,7 +21,6 @@ Each file here explores specific aspects of the project such as damage computati
 
 ## 🛠 Future Notes Ideas
 
-- [ ] Monster AI
 - [ ] Research loot and item systems  
 - [ ] Memory system for AI (working memory, long-term)  
 - [ ] Design ideas for story/lore integration via gameplay  
