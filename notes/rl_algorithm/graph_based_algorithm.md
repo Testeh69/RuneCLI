@@ -1,115 +1,104 @@
 
-###  Graph Thinking Q-NET (GTQN)
+🧠 GTQN — Graph Thinking Q-NET
 
+    Un algorithme inspiré du Q-learning et des systèmes de pensée graphiques, basé sur une idée simple mais expérimentale, qui reste à justifier mathématiquement ou à raffiner.
 
+1. ✨ Introduction
 
-#### 1) Introduction
+Le Graph Thinking Q-NET (GTQN) est un prototype d’algorithme d’apprentissage hybride combinant :
 
-Le graph thinking Q-net (autre idée de nom) est une idée que j'ai eu basé sur plusieurs principes ou inspiration:
+    🧭 Représentation graphe des pensées / transitions,
 
-    - Les chemins de pensée (un peu comme les graphs)
-    - Le Q-learning (policy greedy)
-    - Une méthode de rémanance (poids au graphs, -1 si c'est lien sont pas utilisées, + 1 si les liens sont utilisées, si ils tombent  à 0 ils disparaissent)
+    🔁 Q-learning sans table ni réseau de neurones,
 
-    - Les étapes d'un algorithme de Reinforcement learning
-        ->Observe
-        ->Prend une action -> Policy
-        ->Observe le résultat de l'action dans son réseau -> Metrics
-        ->Réajuste les poids -> Formule de distribution des connaissances
+    🧠 Rémanence : une forme de mémoire pondérée des chemins explorés.
 
+Il s’inspire de plusieurs principes :
 
-#### 2) GOAL:
+    Les “chemins de pensée” représentés comme des arcs pondérés,
 
-    - l'objectif de cette agent n'est non pas de l'entrainer sur un env mais plutot de lui donner des idées de raisonnement partiel sur son env qu'il pourra utiliser lors de son application et update ses poids.
+    La politique gloutonne des algorithmes RL,
 
-« Apprend et évolue par lui-même, sans supervision externe »
+    La mise à jour des “poids de pensée” via une dynamique de décroissance (decay) et de renforcement (reinforcement),
 
-#### 📐 3) Métrique – Réflexion sur les critères de proximité
+    Une boucle agent-environnement librement inspirée du paradigme RL :
 
-    Similarité cosinus : évalue l’orientation entre deux vecteurs.
+        Observer l’état actuel,
 
-    Norme euclidienne : mesure la distance réelle entre deux points.
+        Agir via une politique,
 
-    Rémanence : reflète la fréquence d’utilisation d’un chemin ; plus un chemin est utilisé, plus il est probablement utile.
+        Observer les conséquences,
 
-🧪 Expérimentations
+        Ajuster les poids du graphe.
 
-J’ai testé plusieurs combinaisons de métriques pour estimer la proximité entre deux points :
+2. 🎯 Objectif
 
-    La distance euclidienne seule
+L’objectif de GTQN n’est pas d’entraîner une politique globale sur l’environnement via gradient ou Q-table.
 
-    La similarité cosinus seule
+C’est de donner à un agent une structure de raisonnement partielle, capable d’exploiter son historique de navigation dans un graphe dynamique et pondéré.
 
-    Des combinaisons pondérées des deux
+En d’autres termes :
 
-    Une formulation de type exp(cos_sim) * dist
+    “Un agent qui apprend par lui-même, sans supervision externe, en construisant une carte mentale pondérée de l’espace.”
 
-🎯 Observations
+3. 📐 Métriques et Proximité
 
-    La distance euclidienne seule donne les résultats les plus cohérents, sans être biaisée par l’orientation des vecteurs.
+GTQN explore plusieurs façons de mesurer la “proximité” entre états, essentielles à la navigation :
 
-    Avec des formules impliquant la similarité cosinus, on peut se retrouver avec des situations absurdes, comme considérer que (-6, -6) est plus proche de (6, 6) que (5, 6), simplement parce qu’ils pointent dans la même direction.
+    Distance euclidienne : simple et robuste.
 
-    La direction introduite par le cosinus perturbe trop l’ordre de proximité réel.
+    Similarité cosinus : capturant les directions mais produisant des résultats incohérents (ex : (-6, -6) vu comme proche de (6, 6)).
 
-⚠️ Limite actuelle
+    Formules combinées :
 
-La distance euclidienne ne prend pas en compte la rémanence. Or, cette notion est importante :
+        exp(cos_sim) * dist : souvent instable.
 
-    Un chemin souvent emprunté est probablement plus utile ou plus fiable.
+        Pondérations linéaires : peu efficaces.
 
-Il reste donc à explorer comment intégrer ce facteur dans la métrique finale.
+🔎 Observation-clé :
 
+    La distance euclidienne seule reste la plus fiable pour guider les transitions, sans perturber l’ordre naturel de proximité.
 
+📌 Limite actuelle :
 
-#### 4) PSEUDO-CODE
+La distance euclidienne ignore la rémanence : or, un chemin souvent emprunté est potentiellement plus fiable.
+👉 Il reste à inventer une formule mixte : Proximité = f(dist, rémanence).
+4. ⚠️ Problèmes rencontrés
 
-    ALTERNE ENTRE UN A* ou autre algorithme de path finding et une politique greedy
+    📉 Non-convergence : les formules heuristiques sont trop instables.
 
-    Je définis un état initial So
-    Je définis un état final Sf
-    Je définis un état actuel Sa
-    Je définis une constante rémanante_init = 5
+    🌱 Explosion du graphe :
 
-    Sa = So
+        Trop de noeuds générés.
 
-    Je définis une list_choice_minimal
-    Je définis le graph de pensée graph
-    Je définis un treshold
+        Rémanence insuffisamment punitive.
 
+🧩 Solutions envisagées :
 
-    TANT QUE Sa != Sf
-        A*(Sa,Sf)
-        -> Trouvé une solution:
-            oui-> applique + (ajoute 1 points de remanentes pour chaque path ou l'on passe)
-            non-> Voyage jusqu'aux points de fin 
-                    Calcule la metrique
-                    Ajout a la list_choice_minimal
-                    ->Si il y a des chemins non explorées:
-                        Pour tous les chemins non explorées
-                            Snexp = step(action,Sa)
-                            dist_eucl(snexp)
-                            Ajout a la list_choice_minimal
-                    next_step = argmin de list_choice_minimal
-                    si next_step est dans graph[Sa]:
-                        Oui-> ajoute une remanente +2
-                        Non-> ajoute graph[sa] = { {lieu: step(next_step,Sa), Remanente: remanente_init}}
-                    Sa = step(next_step,Sa)
-        Applique une remanence - 1 a tous le graph
-        Supprime les path dons les points ont une remanente inférieur à threshold
+    Limite stricte du nombre de noeuds.
 
-                            
-            
+    Decay stochastique des poids.
 
+    Seuillage : suppression des arcs dont la rémanence < threshold.
 
+5. 🧠 Conclusion critique
 
+    En l’état, GTQN est dominé par des algorithmes plus simples.
 
+Alternatives plus efficaces :
 
+    Politique gloutonne (greedy) + heatmap d’exploration.
 
+    Q-learning tabulaire ou Deep RL.
 
+    Graph-based search (A*) avec métriques heuristiques.
 
-                        
+➡️ GTQN n’apporte pas de bénéfice clair comparé à ces approches.
+Mais ses concepts peuvent être réutilisés comme modules :
 
+    Pour l’explicabilité (visualiser les chemins empruntés),
 
+    Pour des comportements semi-scriptés (IA NPC avec mémoire adaptative),
 
+    Pour un moteur narratif ou de décision “psychologique”.
 
