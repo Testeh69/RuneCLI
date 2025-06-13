@@ -1,100 +1,117 @@
 #include "fight.hpp"
-#include <queue>
 
 
 
 
 
-std::queue<IdFight> makeTurnFightQueue (Player& character, Monster& monster){
-    int vitesse_character = character.vitesse;
-    int vitesse_monster = monster.vitesse;
-    std::queue<IdFight> fight_queue;
+
+
+
+FightOneVsOne::FightOneVsOne(Player& personnage, Monster& monstre)
+    : personnage(personnage), monstre(monstre) {}
+
+
+void FightOneVsOne::menuFight(){
+    int choice;
+    std::cout<< "Your action : 1- Attaque  2- Bag 3- Fuir"<<std::endl;
+    std::cin>> choice;
+    this->choice_action = choice;
+};
+
+
+
+
+
+
+void FightOneVsOne::makeTurnFightQueue (){
+    while (!this->fight_queue.empty()) {
+        this->fight_queue.pop();
+    }    
+    int vitesse_character = this->personnage.vitesse;
+    int vitesse_monster = this->monstre.vitesse;
     if (vitesse_monster <= vitesse_character){
         while (vitesse_monster <vitesse_character){
-            fight_queue.push(IdFight::Player);
+            this->fight_queue.push(IdFight::Player);
             vitesse_character -= vitesse_monster;
         }
-        fight_queue.push(IdFight::Monster);
+        this->fight_queue.push(IdFight::Monster);
     }
     else{
         while (vitesse_monster > vitesse_character){
-            fight_queue.push(IdFight::Monster);
+            this->fight_queue.push(IdFight::Monster);
             vitesse_monster -= vitesse_character;
         }
-        fight_queue.push(IdFight::Player);
+        this->fight_queue.push(IdFight::Player);
     }
-    return fight_queue;
-}
+};
 
 
-
-
-
-int menuFight(){
-    int choice_action;
-    std::cout<< "Your action : 1- Attaque 2- Fuir"<<std::endl;
-    std::cin>> choice_action;
-    return choice_action;
-}
-
-
-int fight (Player& personnage, Monster& monstre){
-    std::cout << personnage.name << " VS " <<  monstre.name<< std::endl;
+void FightOneVsOne::displayInitDataFight(){
     std::cout<<std::endl;
-    int output_fight;
-    int choice_player;
-    while (personnage.status_life && monstre.status_life){
-        personnage.displayData();
-        monstre.displayData(); 
-        std::queue<IdFight> turn_fight_queue = makeTurnFightQueue(personnage, monstre);
-        IdFight turn_character;
-        while (!turn_fight_queue.empty()){
-            turn_character = turn_fight_queue.front();
-            turn_fight_queue.pop();
-            switch (turn_character)
-            {
-            case IdFight::Player:
-                choice_player = menuFight();
-                switch (choice_player)
-                {
-                case 1:
-                    personnage.attack(monstre);
-                    break;
-                
-                case 2:
-                    output_fight = 2;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            
-            case IdFight::Monster:
-                monstre.attack(personnage);
-            default:
-                break;
-            }
-            if (personnage.life <= 0) {
-                output_fight = 0;
-            }
-            else if (monstre.life <= 0){
-                output_fight = 1;
-            }
-            else if (output_fight == 2){
-                break;
-            }
+    std::cout << this->personnage.name << " VS " <<  this->monstre.name<< std::endl;
+    std::cout<<std::endl;
 
-        }
-    }
-    return output_fight;
+};
+
+
+int FightOneVsOne::fightLoop(){
+    this->displayInitDataFight();
     
+    int turn = 1;
+    while (this->personnage.life>0 && this->monstre.life> 0){
+        std::cout<<"Tour: "<<turn<<std::endl;
+        makeTurnFightQueue();
+        while (!this->fight_queue.empty() && (this->personnage.life>0 && this->monstre.life> 0)){
+            enum IdFight id = this->fight_queue.front();
+            this->fight_queue.pop();
+            switch(id){
+                case IdFight::Player:
+                    this->menuFight();
+                    switch (this->choice_action){
+                        case 1 :
+                            int result = personnage.menuAttack();
+                            if (result<5 && result>0){
+                                std::shared_ptr<Spell> spell_ptr = personnage.getAttack(result);
+                                int damage = personnage.attack(monstre, spell_ptr);
+                                std::cout << personnage.name << " attacks " << monstre.name << " with " << spell_ptr->name << " causing " << damage << " damage." << std::endl;
+                                monstre.life -= damage;
+                                if (monstre.life <= 0) {
+                                    displayFightResult(FightResult::Victory);
+                                    return 1; // Victory
+                                }
+                            } else {
+                                std::cout << "Returning to menu..." << std::endl;
+                            }
+                            // Display the player's attacks
+                            // Get the player's choice of attack
+                            //Fight menu
+                            // Display attack menu
+                            // Get the player choice (attack or return)
+                            break;
+                        case 2 :
+                            //Bag menu
+                            break;
+                        case 3 :
+                            //Fuir
+                            break; 
+                    }
+                    break;
+                case IdFight::Monster:
+                    break;
+            }
 
-} 
+        };
+        
+        turn++;
+        
+        
+    }
+    return 0;
+};
 
 
 
-
-void displayFightResult(FightResult result) {
+void FightOneVsOne::displayFightResult(FightResult result) {
     switch (result) {
         case FightResult::Defeat:
             std::cout << "\n💀 You are dead!\n";
@@ -113,16 +130,11 @@ void displayFightResult(FightResult result) {
 
 
 
-void fightLoop(Player& player){
-    Monster monster = Monster(
-        30, 
-        12,  
-        6,   
-        4,   
-        8,   
-        4   
-    );
-    int result = fight(player, monster);
-    FightResult fightresult = static_cast<FightResult>(result);
-    displayFightResult(fightresult);
+void Arena(Player& player){
+        std::string name_monster = "Goblin";
+        Monster goblin(name_monster, 30, 15, 2, 3, 8, 12, 10);
+        FightOneVsOne fightArena(player, goblin);
+        int result = fightArena.fightLoop();
+        
+
 }

@@ -1,8 +1,20 @@
-#include "../lifeform/player.hpp"
-#include <iostream>
-
 #pragma once
 
+#include "../lifeform/entities.hpp"
+#include "../lifeform/spell/spell.hpp"
+#include <iostream>
+#include <queue>
+#include <memory>
+#include <vector>
+
+
+
+
+
+struct effectSpellToken{
+    int token;
+    std::vector<std::shared_ptr<Spell>> spell_ptr;
+};
 
 
 enum class FightResult{
@@ -18,12 +30,37 @@ enum class IdFight{
     Monster = 1,
 };
 
-int menuFight();
-
-int fight (Player& personnage, Monster& monstre);
 
 
-void displayFightResult(FightResult result);
+class FightOneVsOne{
 
 
-void fightLoop(Player& player);
+    public:
+    FightOneVsOne(Player& personnage , Monster& Monstre);
+
+    int fightLoop();
+
+
+
+    private:
+    
+    void displayInitDataFight();
+    void menuFight();
+    void makeTurnFightQueue ();
+    void displayFightResult(FightResult result); 
+    
+    std::queue<IdFight> fight_queue;
+    Player& personnage;
+    Monster& monstre;
+    int choice_action;
+
+
+
+};
+
+
+
+
+
+
+void Arena(Player& player);

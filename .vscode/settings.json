@@ -45,6 +45,20 @@
         "typeinfo": "cpp",
         "hash_map": "cpp",
         "map": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "variant": "cpp",
+        "fstream": "cpp",
+        "any": "cpp",
+        "codecvt": "cpp",
+        "cstring": "cpp",
+        "ctime": "cpp",
+        "forward_list": "cpp",
+        "optional": "cpp",
+        "ratio": "cpp",
+        "iomanip": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "sstream": "cpp",
+        "valarray": "cpp"
     }
 }

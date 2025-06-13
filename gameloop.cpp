@@ -19,6 +19,7 @@ void chooseJob(Player& character,std::unordered_map<std::string,Job>& job_list){
     std::unordered_map<int,std::string> link_job_choice = displayJob(job_list);
     int choice_job;
     std::cin>>choice_job;
+    std::cout<<std::endl;
     std::string job_character = link_job_choice[choice_job];
     character.setJob(job_character);
 }
@@ -33,7 +34,7 @@ void gameLoop(){
     while(player.life > 0){
         int choice_player = menu();
         if (choice_player == 1){
-            fightLoop(player);
+            Arena(player);
         }
         else if  (choice_player == 2)
         {
