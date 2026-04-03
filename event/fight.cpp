@@ -68,13 +68,16 @@ int FightOneVsOne::fightLoop(){
                 case IdFight::Player:
                     this->menuFight();
                     switch (this->choice_action){
-                        case 1 :
+                        case 1 :{
                             int result = personnage.menuAttack();
                             if (result<5 && result>0){
                                 std::shared_ptr<Spell> spell_ptr = personnage.getAttack(result);
                                 int damage = personnage.attack(monstre, spell_ptr);
+                                std::cout<< "-----------------------------"<<std::endl;
                                 std::cout << personnage.name << " attacks " << monstre.name << " with " << spell_ptr->name << " causing " << damage << " damage." << std::endl;
                                 monstre.life -= damage;
+                                std::cout<<std::endl;
+                                monstre.displayData();
                                 if (monstre.life <= 0) {
                                     displayFightResult(FightResult::Victory);
                                     return 1; // Victory
@@ -88,6 +91,7 @@ int FightOneVsOne::fightLoop(){
                             // Display attack menu
                             // Get the player choice (attack or return)
                             break;
+                        }
                         case 2 :
                             //Bag menu
                             break;
@@ -97,6 +101,16 @@ int FightOneVsOne::fightLoop(){
                     }
                     break;
                 case IdFight::Monster:
+                    monstre.attack(personnage);
+                    std::cout<< "-----------------------------"<<std::endl;
+                    std::cout << monstre.name << " attacks " << personnage.name << " causing " << monstre.attaque - personnage.defense << " damage." << std::endl;
+                    personnage.life -= (monstre.attaque - personnage.defense);
+                    std::cout<<std::endl;
+                    personnage.displayData();
+                    if (personnage.life <= 0) {
+                        displayFightResult(FightResult::Defeat);
+                        return 0; // Defeat
+                    }
                     break;
             }
 
